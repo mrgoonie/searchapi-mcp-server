@@ -1,9 +1,23 @@
 import { Logger } from './logger.util.js';
+import { config } from './config.util.js';
 import {
 	createApiError,
 	createUnexpectedError,
 	McpError,
 } from './error.util.js';
+
+// Create a contextualized logger for this file
+const transportLogger = Logger.forContext('utils/transport.util.ts');
+
+// Log transport utility initialization
+transportLogger.debug('Transport utility initialized');
+
+/**
+ * Interface for IP API credentials
+ */
+export interface IpApiCredentials {
+	apiToken: string | undefined;
+}
 
 /**
  * Interface for HTTP request options
@@ -12,6 +26,69 @@ export interface RequestOptions {
 	method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
 	headers?: Record<string, string>;
 	body?: unknown;
+}
+
+/**
+ * Get IP API credentials from environment variables
+ * @returns IpApiCredentials object containing the API token (which may be undefined if not set)
+ */
+export function getIpApiCredentials(): IpApiCredentials {
+	const methodLogger = Logger.forContext(
+		'utils/transport.util.ts',
+		'getIpApiCredentials',
+	);
+
+	const apiToken = config.get('IPAPI_API_TOKEN');
+
+	if (!apiToken) {
+		methodLogger.debug(
+			'No IP API token found. The API will be used in free tier mode.',
+		);
+	} else {
+		methodLogger.debug('Using IP API token from configuration');
+	}
+
+	return {
+		apiToken,
+	};
+}
+
+/**
+ * Fetch data from IP API
+ * @param path The path/IP address to fetch data for
+ * @param options Request options (method, headers, body)
+ * @returns Response data as type T
+ * @throws {McpError} If the fetch fails or the response is not ok
+ */
+export async function fetchIpApi<T>(
+	path: string,
+	options: RequestOptions = {},
+): Promise<T> {
+	const methodLogger = Logger.forContext(
+		'utils/transport.util.ts',
+		'fetchIpApi',
+	);
+
+	// Get credentials
+	const credentials = getIpApiCredentials();
+
+	// Construct the full URL
+	const baseUrl = 'http://ip-api.com/json';
+
+	// Ensure path is formatted correctly
+	const normalizedPath = path ? `/${path}` : '';
+	let url = `${baseUrl}${normalizedPath}`;
+
+	// Add API token if available
+	if (credentials.apiToken) {
+		url += `?key=${credentials.apiToken}`;
+		methodLogger.debug('Added API token to request');
+	}
+
+	methodLogger.debug(`Calling IP API: ${url}`);
+
+	// Use the generic fetchApi function with the constructed URL
+	return fetchApi<T>(url, options);
 }
 
 /**

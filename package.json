@@ -4,6 +4,7 @@
 	"description": "A TypeScript-based Model Context Protocol (MCP) server boilerplate for building AI-connected tools. Features IP lookup tools, CLI support, MCP Inspector integration, and extensible architecture for connecting Claude/Anthropic AI systems to external data sources.",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
+	"_moduleNotes": "Although source code uses ESM syntax, the build output target is CommonJS to align with Node.js compatibility and patterns seen in related MCP servers. tsconfig.json's 'module': 'NodeNext' handles the input syntax, while tsc outputs CJS.",
 	"type": "commonjs",
 	"repository": {
 		"type": "git",

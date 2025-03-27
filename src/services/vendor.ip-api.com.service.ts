@@ -1,38 +1,33 @@
 import { Logger } from '../utils/logger.util.js';
-import { config } from '../utils/config.util.js';
 import { IPDetail } from './vendor.ip-api.com.type.js';
 import {
 	createApiError,
 	createUnexpectedError,
 	McpError,
 } from '../utils/error.util.js';
-import { fetchApi } from '../utils/transport.util.js';
+import { fetchIpApi } from '../utils/transport.util.js';
 
-const ENDPOINT = 'http://ip-api.com/json';
+// Create a contextualized logger for this file
+const serviceLogger = Logger.forContext(
+	'services/vendor.ip-api.com.service.ts',
+);
+
+// Log service initialization
+serviceLogger.debug('IP API service initialized');
 
 async function get(ipAddress?: string): Promise<IPDetail> {
 	const methodLogger = Logger.forContext(
 		'services/vendor.ip-api.com.service.ts',
 		'get',
 	);
-	methodLogger.debug(`Calling the API via transport util...`);
-
-	// Get API token from configuration
-	const apiToken = config.get('IPAPI_API_TOKEN');
-
-	// Build URL with token if available
-	let url = `${ENDPOINT}/${ipAddress ?? ''}`;
-	if (apiToken) {
-		url += `?key=${apiToken}`;
-		methodLogger.debug(`Using API token`);
-	}
+	methodLogger.debug(`Calling IP API for IP: ${ipAddress || 'current'}`);
 
 	try {
-		// Use the centralized fetchApi utility
-		// Explicitly type the expected response structure for fetchApi
-		const data = await fetchApi<
+		// Use the centralized fetchIpApi utility
+		// Explicitly type the expected response structure
+		const data = await fetchIpApi<
 			{ status: string; message?: string } & IPDetail
-		>(url);
+		>(ipAddress || '');
 
 		// Handle API-level success/failure specific to ip-api.com
 		if (data.status !== 'success') {
