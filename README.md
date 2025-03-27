@@ -1,215 +1,199 @@
 # Boilerplate MCP Server
 
-## About
+This project provides a Model Context Protocol (MCP) server template that serves as a starting point for building your own connections between AI assistants (like Anthropic's Claude, Cursor AI, or other MCP-compatible clients) and external data sources or APIs. It includes a working IP lookup tool example to demonstrate the pattern.
 
-This project is a customizable Model Context Protocol (MCP) server written in TypeScript, designed to extend AI assistants like Claude or Cursor with external tools and data sources. MCP is an open-source protocol by Anthropic for connecting AI systems to external capabilities securely and efficiently. For more details on MCP, see [https://modelcontextprotocol.io/docs/](https://modelcontextprotocol.io/docs/). This boilerplate provides a starting point with an IP lookup tool, CLI support, and a flexible architecture for adding your own features.
+## What is MCP and Why Use This Template?
 
-## Project Features
+Model Context Protocol (MCP) is an open standard enabling AI models to connect securely to external tools and data sources. This server implements the MCP standard with a flexible architecture for building custom tools.
 
-- **MCP Server**: Exposes tools and resources to AI clients (e.g., Claude Desktop, Cursor AI) via STDIO or HTTP.
-- **IP Address Lookup**: Includes an example tool (`get-ip-details`) for fetching IP details, configurable with [ipapi.co](https://ipapi.co).
-- **CLI Support**: Run tools directly from the command line without an AI client.
-- **Flexible Configuration**: Supports direct environment variables for quick use or a global config file at `$HOME/.mcp/configs.json` for managing multiple servers.
-- **Development Tools**: Built-in MCP Inspector for debugging, plus testing and linting utilities.
+**Benefits:**
 
-### Available Tools
+- **Quick Start:** Begin with a fully-functional MCP server structure including CLI support.
+- **Proven Patterns:** Follow established architecture patterns used in production MCP servers.
+- **Complete Example:** Includes a working IP lookup tool demonstrating the full pattern from CLI to API.
+- **Modern TypeScript:** Built with TypeScript and modern Node.js practices for type safety and maintainability.
+- **Testing Support:** Includes test infrastructure for both unit and CLI integration tests.
 
-- **`get-ip-details`**: Get information about an IP address or the current device's IP.
+## Available Tools
 
-## User Guide
+This MCP server provides the following example tool for your AI assistant:
 
-### Configuration Options
+- **Get IP Address Details (`get-ip-details`)**
 
-- **DEBUG**: Set to `true` for detailed logging (default: `false`).
-- **IPAPI_API_TOKEN**: Optional API token for [ipapi.co](https://ipapi.co) to enhance IP lookups (basic lookups work without it).
+    - **Purpose:** Retrieves geolocation information (country, city, region, coordinates), ISP, and organization details associated with an IP address.
+    - **Use When:** You need to find the geographical location of a given IP address, identify the ISP/organization owning an IP, or get your own public IP details.
+    - **Conversational Example:** "What's my public IP and where is it located?" or "Look up the location of IP 8.8.8.8"
+    - **Parameter Example:** `{}` (no parameters for current device IP) or `{ ipAddress: "8.8.8.8" }` (specific IP)
 
-#### Method 1: Environment Variables
+## Interface Philosophy: Simple Input, Rich Output
 
-Pass configs directly when running:
+This server follows a "Minimal Interface, Maximal Detail" approach:
 
-```bash
-DEBUG=true IPAPI_API_TOKEN=your_token npx -y @aashari/boilerplate-mcp-server
-```
+1. **Simple Tools:** Ask for only essential identifiers or parameters (like `ipAddress`).
+2. **Rich Details:** Provides comprehensive information in a well-formatted Markdown response.
 
-#### Method 2: Global Config File (Recommended)
+## Prerequisites
 
-Create `$HOME/.mcp/configs.json`:
+- **Node.js and npm:** Ensure you have Node.js (which includes npm) installed. Download from [nodejs.org](https://nodejs.org/).
+- **IP API Token (Optional):** For enhanced IP lookup capabilities, you can obtain a token from [ip-api.com](https://ip-api.com/) (basic lookups work without a token).
 
-```json
-{
-	"@aashari/boilerplate-mcp-server": {
-		"environments": {
-			"DEBUG": "true",
-			"IPAPI_API_TOKEN": "your_token"
-		}
-	}
-}
-```
+## Quick Start Guide
 
-You can also configure multiple MCP servers in the same file:
+Follow these steps to connect your AI assistant to this boilerplate server:
 
-```json
-{
-	"@aashari/boilerplate-mcp-server": {
-		"environments": {
-			"DEBUG": "true",
-			"IPAPI_API_TOKEN": "your_token"
-		}
-	},
-	"@aashari/mcp-server-atlassian-confluence": {
-		"environments": {
-			"DEBUG": "true",
-			"ATLASSIAN_SITE_NAME": "your-instance",
-			"ATLASSIAN_USER_EMAIL": "your-email@example.com",
-			"ATLASSIAN_API_TOKEN": "your_api_token"
-		}
-	},
-	"@aashari/mcp-server-atlassian-jira": {
-		"environments": {
-			"DEBUG": "true",
-			"ATLASSIAN_SITE_NAME": "your-instance",
-			"ATLASSIAN_USER_EMAIL": "your-email@example.com",
-			"ATLASSIAN_API_TOKEN": "your_api_token"
-		}
-	}
-}
-```
+### Step 1: Configure the Server (Optional)
 
-### Using with Claude Desktop
+The server works without configuration, but for enhanced options:
 
-1. **Open Settings**:
-    - Launch Claude Desktop, click the gear icon (top-right).
-2. **Edit Config**:
-    - Click "Edit Config" to open `claude_desktop_config.json` (e.g., `~/Library/Application Support/Claude` on macOS or `%APPDATA%\Claude` on Windows).
-3. **Add Server**:
-    - Use the global config file (recommended):
-        ```json
-        {
-        	"mcpServers": {
-        		"aashari/boilerplate-mcp-server": {
-        			"command": "npx",
-        			"args": ["-y", "@aashari/boilerplate-mcp-server"]
-        		}
-        	}
-        }
-        ```
-    - Or configure directly:
-        ```json
-        {
-        	"mcpServers": {
-        		"aashari/boilerplate-mcp-server": {
-        			"command": "npx",
-        			"args": [
-        				"-y",
-        				"DEBUG=true",
-        				"IPAPI_API_TOKEN=your_token",
-        				"@aashari/boilerplate-mcp-server"
-        			]
-        		}
-        	}
-        }
-        ```
-4. **Restart**: Close and reopen Claude Desktop.
-5. **Test**: Click the hammer icon, verify `get-ip-details` is listed, then ask: "What's my public IP?" or "Get details for IP 8.8.8.8".
+#### Method A: Global MCP Config File (Recommended)
 
-### Using with Cursor AI
+This keeps configurations separate and organized.
 
-1. **Open Settings**:
-    - Launch Cursor, press `CMD + SHIFT + P` (or `CTRL + SHIFT + P`), select "Cursor Settings" > "MCP".
-2. **Add Server**:
-    - Click "+ Add new MCP server".
-    - **Name**: `aashari/boilerplate-mcp-server`.
-    - **Type**: `command`.
-    - **Command**:
-        - Global config: `npx -y @aashari/boilerplate-mcp-server`.
-        - Direct: `DEBUG=true IPAPI_API_TOKEN=your_token npx -y @aashari/boilerplate-mcp-server`.
-    - Click "Add".
-3. **Verify**: Check for a green indicator and `get-ip-details` tool listed.
-4. **Test**: In Agent mode, ask: "What's my public IP?" or "Get information about IP 8.8.8.8".
+1. **Create the directory** (if needed): `~/.mcp/`
+2. **Create/Edit the file:** `~/.mcp/configs.json`
+3. **Add the configuration:** Paste the following JSON structure, replacing the placeholders:
 
-### Using as a CLI Tool
+    ```json
+    {
+    	"@aashari/boilerplate-mcp-server": {
+    		"environments": {
+    			"DEBUG": "true",
+    			"IPAPI_API_TOKEN": "<YOUR_OPTIONAL_IP_API_TOKEN>"
+    		}
+    	}
+    	// Add other servers here if needed
+    }
+    ```
 
-Run without installation:
+#### Method B: Environment Variables (Alternative)
+
+Set environment variables when running the server.
 
 ```bash
-# Help
-npx -y @aashari/boilerplate-mcp-server -- --help
-# Current IP
-npx -y @aashari/boilerplate-mcp-server -- get-ip-details
-# Specific IP
-npx -y @aashari/boilerplate-mcp-server -- get-ip-details 8.8.8.8
+DEBUG=true IPAPI_API_TOKEN="<YOUR_OPTIONAL_TOKEN>" npx -y @aashari/boilerplate-mcp-server
 ```
 
-Or install globally:
+### Step 2: Connect Your AI Assistant
+
+Configure your MCP client (Claude Desktop, Cursor, etc.) to run this server.
+
+#### Claude Desktop
+
+1. Open Settings (gear icon) > Edit Config.
+2. Add or merge into `mcpServers`:
+
+    ```json
+    {
+    	"mcpServers": {
+    		"aashari/boilerplate-mcp-server": {
+    			"command": "npx",
+    			"args": ["-y", "@aashari/boilerplate-mcp-server"]
+    		}
+    		// ... other servers
+    	}
+    }
+    ```
+
+3. Save and **Restart Claude Desktop**.
+4. **Verify:** Click the "Tools" (hammer) icon; the IP lookup tool should be listed.
+
+#### Cursor AI
+
+1. Command Palette (`Cmd+Shift+P` / `Ctrl+Shift+P`) > **Cursor Settings > MCP**.
+2. Click **+ Add new MCP server**.
+3. Enter:
+    - Name: `aashari/boilerplate-mcp-server`
+    - Type: `command`
+    - Command: `npx -y @aashari/boilerplate-mcp-server`
+4. Click **Add**.
+5. **Verify:** Wait for the indicator next to the server name to turn green.
+
+### Step 3: Using the Tools
+
+You can now ask your AI assistant IP-related questions:
+
+- "What's my public IP address and where is it located?"
+- "Can you get details for IP 8.8.8.8?"
+- "Look up the geolocation of 1.1.1.1"
+
+## Using as a Command-Line Tool (CLI)
+
+You can also use this package directly from your terminal:
+
+#### Quick Use with `npx`
 
 ```bash
-npm install -g @aashari/boilerplate-mcp-server
+npx -y @aashari/boilerplate-mcp-server get-ip-details
+npx -y @aashari/boilerplate-mcp-server get-ip-details 8.8.8.8
+npx -y @aashari/boilerplate-mcp-server --help
 ```
 
-Then run:
+#### Global Installation (Optional)
+
+1. `npm install -g @aashari/boilerplate-mcp-server`
+2. Use the `mcp-server` command:
 
 ```bash
-# Help
-mcp-server --help
-# Current IP
 mcp-server get-ip-details
-# Specific IP
 mcp-server get-ip-details 8.8.8.8
+mcp-server --help # See all commands
 ```
 
-Use the global config file or prefix with environment variables:
+## Extending the Project
 
-```bash
-DEBUG=true IPAPI_API_TOKEN=your_token mcp-server get-ip-details
-```
+This boilerplate is designed to be extended with your own custom tools:
+
+### Architecture Overview
+
+The project follows a clean layered architecture:
+
+- **CLI / Tool Layer** (`src/cli/*.cli.ts`, `src/tools/*.tool.ts`): User interfaces
+- **Controller Layer** (`src/controllers/*.controller.ts`): Business logic
+- **Service Layer** (`src/services/*.service.ts`): External API interactions
+- **Utils** (`src/utils/*.util.ts`): Shared functionality
+
+### Adding Your Own Tools
+
+1. **Create a Service** in `src/services/` to interact with your API or data source.
+2. **Add a Controller** in `src/controllers/` with business logic and type definitions.
+3. **Implement a Tool** in `src/tools/` that defines the MCP tool interface.
+4. **Add CLI Support** in `src/cli/` to enable command-line use.
+5. **Register** your new tool in `src/index.ts`.
 
 ## Developer Guide
 
 ### Development Scripts
 
-The project includes several scripts for development and production use:
-
-- **`npm run dev:server`**: Run the server in development mode with MCP Inspector and debug logging.
-- **`npm run dev:cli`**: Run CLI commands in development mode with debug logging.
-- **`npm run start:server`**: Run the server in production mode with MCP Inspector.
-- **`npm run start:cli`**: Run CLI commands in production mode.
-
-Example usage:
-
 ```bash
-# Start the server with Inspector and debug logging
+# Start server in development mode (with Inspector & debug logs)
 npm run dev:server
 
-# Run a CLI command with debug logging
+# Run CLI in development mode
 npm run dev:cli -- get-ip-details 8.8.8.8
 
-# Start the server with Inspector (no debug)
+# Production mode (server with Inspector)
 npm run start:server
 
-# Run a CLI command (no debug)
-npm run start:cli -- get-ip-details 8.8.8.8
+# Production mode (CLI command)
+npm run start:cli -- get-ip-details
 ```
 
-### Extending the Project
-
-To add custom tools or resources:
-
-1. **Services**: Add API/data logic in `src/services`.
-2. **Controllers**: Implement business logic in `src/controllers`.
-3. **Tools**: Define new tools in `src/tools`.
-4. **Resources**: Add data sources in `src/resources`.
-5. **Register**: Update `src/index.ts` with your tools/resources.
-
-### Additional Development Tools
+### Testing and Quality Tools
 
 ```bash
-# Run tests
+# Run all tests
 npm test
-# Test coverage
+
+# Run specific CLI tests
+npm test -- src/cli/ipaddress.cli.test.ts
+
+# Generate test coverage report
 npm run test:coverage
-# Lint
+
+# Lint code
 npm run lint
-# Format
+
+# Format code
 npm run format
 ```
 
@@ -217,9 +201,30 @@ npm run format
 
 The MCP Inspector provides a visual interface for debugging and testing your MCP server:
 
-1. The Inspector starts your MCP server.
-2. It launches a web UI (typically at `http://localhost:5173`).
-3. Use the UI to test tools, view requests/responses, and check errors.
+1. Run `npm run dev:server` or `npm run start:server`
+2. The Inspector launches a web UI (typically at `http://localhost:5173`)
+3. Use the UI to test tools, view requests/responses, and check errors
+
+## Troubleshooting
+
+- **Server Not Connecting (in AI Client):**
+    - Confirm the command (`npx ...`) in your client's config is correct
+    - Check Node.js/npm installation and PATH
+    - Run the `npx` command directly in your terminal for errors
+- **IP API Errors:**
+    - Basic lookups should work without configuration
+    - If using a token, verify `IPAPI_API_TOKEN` is set correctly
+    - Some IP ranges (private IPs like 192.168.x.x) may not return results
+- **Enable Debug Logs:** Set `DEBUG=true` environment variable for verbose logging
+
+## For Developers: Contributing
+
+Contributions are welcome! If you'd like to contribute:
+
+- **Setup:** Clone repo, `npm install`. Use `npm run dev:server` or `npm run dev:cli -- <command>`.
+- **Code Style:** Use `npm run lint` and `npm run format`.
+- **Tests:** Add tests via `npm test`.
+- **Consistency:** Follow existing patterns and the "Minimal Interface, Maximal Detail" philosophy.
 
 ## License
 
