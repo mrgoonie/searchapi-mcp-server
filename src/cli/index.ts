@@ -4,7 +4,7 @@ import { Logger } from '../utils/logger.util.js';
 import ipAddressCli from './ipaddress.cli.js';
 
 // Get the version from package.json
-const VERSION = '1.0.1'; // This should match the version in src/index.ts
+const VERSION = '1.1.1'; // This should match the version in src/index.ts
 const NAME = '@aashari/boilerplate-mcp-server';
 const DESCRIPTION =
 	'A boilerplate Model Context Protocol (MCP) server implementation using TypeScript';

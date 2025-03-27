@@ -1,3 +1,13 @@
+## [1.1.1](https://github.com/aashari/boilerplate-mcp-server/compare/v1.1.0...v1.1.1) (2025-03-27)
+
+
+### Performance Improvements
+
+* **core:** refactor code structure to align with Atlassian MCP patterns ([090fd56](https://github.com/aashari/boilerplate-mcp-server/commit/090fd5653ab62d70eb75c49828a9876f54cee6fc))
+* **standards:** align codebase with Atlassian MCP server patterns ([8b8eb13](https://github.com/aashari/boilerplate-mcp-server/commit/8b8eb13fd4ce18158e83c4f8c7044ce06287f23e))
+* **tests:** add CLI test infrastructure and ipaddress tests ([ccee308](https://github.com/aashari/boilerplate-mcp-server/commit/ccee308a86e076a67756e9113b481aa3848f40b7))
+* **utils:** implement standardized core utilities and error handling ([6c14a2f](https://github.com/aashari/boilerplate-mcp-server/commit/6c14a2f83397f79cc39f0b7ec70b40e9d9755b9c))
+
 # [1.1.0](https://github.com/aashari/boilerplate-mcp-server/compare/v1.0.3...v1.1.0) (2025-03-23)
 
 
