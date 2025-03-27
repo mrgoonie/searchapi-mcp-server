@@ -3,6 +3,7 @@ import { Logger } from '../utils/logger.util.js';
 import { ControllerResponse } from '../types/common.types.js';
 import { formatIpDetails } from './ipaddress.formatter.js';
 import { handleControllerError } from '../utils/error-handler.util.js';
+import { applyDefaults } from '../utils/defaults.util.js';
 
 async function get(ipAddress?: string): Promise<ControllerResponse> {
 	const methodLogger = Logger.forContext(
@@ -12,6 +13,18 @@ async function get(ipAddress?: string): Promise<ControllerResponse> {
 	methodLogger.debug(`Getting IP address details...`);
 
 	try {
+		// Define potential options interface (even if empty now)
+		interface GetIpOptions {
+			[key: string]: unknown;
+		} // Placeholder
+
+		// Create defaults object (even if empty now)
+		const defaults: Partial<GetIpOptions> = {}; // Placeholder
+
+		// Apply defaults (will just return the empty options object for now)
+		const mergedOptions = applyDefaults<GetIpOptions>({}, defaults);
+		methodLogger.debug('Using options after defaults:', mergedOptions); // Log merged options
+
 		const ipData = await ipApiService.get(ipAddress);
 		methodLogger.debug(`Got the response from the service`, ipData);
 

@@ -44,7 +44,30 @@ function register(server: McpServer) {
 	methodLogger.debug(`Registering tools...`);
 	server.tool(
 		'get-ip-details',
-		'Get details about a specific IP address or the current device (if no IP address is provided)',
+		`Get details about a specific IP address or the current device's public IP address.
+
+            PURPOSE: Retrieves geolocation information (country, city, region, coordinates), ISP, and organization details associated with an IP address.
+
+            WHEN TO USE:
+            - To find the geographical location of a given IP address.
+            - To identify the ISP or organization owning an IP address.
+            - To get your own public IP address details (by omitting the 'ipAddress' argument).
+
+            WHEN NOT TO USE:
+            - For internal/private IP addresses (this tool queries a public database).
+            - When you need historical IP data (this provides current lookup).
+            - For operations other than retrieving IP geolocation details.
+
+            RETURNS: Formatted Markdown containing details such as country, city, region, latitude, longitude, ISP, organization, and the queried IP itself.
+
+            EXAMPLES:
+            - Get details for a specific IP: { ipAddress: "8.8.8.8" }
+            - Get details for the current device's IP: {}
+
+            ERRORS:
+            - Invalid IP format: If the provided 'ipAddress' is not a valid IP.
+            - Private/Reserved IP: If the IP address is in a private range.
+            - API errors: If the external ip-api.com service fails.`,
 		IpAddressToolArgs.shape,
 		getIpAddressDetails,
 	);
