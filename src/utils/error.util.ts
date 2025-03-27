@@ -1,4 +1,4 @@
-import { logger } from './logger.util.js';
+import { Logger } from './logger.util.js';
 
 /**
  * Error types for classification
@@ -102,11 +102,12 @@ export function ensureMcpError(error: unknown): McpError {
 export function formatErrorForMcpTool(error: unknown): {
 	content: Array<{ type: 'text'; text: string }>;
 } {
-	const mcpError = ensureMcpError(error);
-	logger.error(
-		`[src/utils/error.util.ts@formatErrorForMcpTool] ${mcpError.type} error`,
-		mcpError,
+	const methodLogger = Logger.forContext(
+		'utils/error.util.ts',
+		'formatErrorForMcpTool',
 	);
+	const mcpError = ensureMcpError(error);
+	methodLogger.error(`${mcpError.type} error`, mcpError);
 
 	return {
 		content: [
@@ -132,11 +133,12 @@ export function formatErrorForMcpResource(
 		description?: string;
 	}>;
 } {
-	const mcpError = ensureMcpError(error);
-	logger.error(
-		`[src/utils/error.util.ts@formatErrorForMcpResource] ${mcpError.type} error`,
-		mcpError,
+	const methodLogger = Logger.forContext(
+		'utils/error.util.ts',
+		'formatErrorForMcpResource',
 	);
+	const mcpError = ensureMcpError(error);
+	methodLogger.error(`${mcpError.type} error`, mcpError);
 
 	return {
 		contents: [
@@ -154,11 +156,12 @@ export function formatErrorForMcpResource(
  * Handle error in CLI context
  */
 export function handleCliError(error: unknown): never {
-	const mcpError = ensureMcpError(error);
-	logger.error(
-		`[src/utils/error.util.ts@handleCliError] ${mcpError.type} error`,
-		mcpError,
+	const methodLogger = Logger.forContext(
+		'utils/error.util.ts',
+		'handleCliError',
 	);
+	const mcpError = ensureMcpError(error);
+	methodLogger.error(`${mcpError.type} error`, mcpError);
 	console.error(`Error: ${mcpError.message}`);
 	process.exit(1);
 }

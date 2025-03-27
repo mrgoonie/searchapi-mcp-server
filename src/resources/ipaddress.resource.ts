@@ -1,5 +1,5 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
-import { logger } from '../utils/logger.util.js';
+import { Logger } from '../utils/logger.util.js';
 import { formatErrorForMcpResource } from '../utils/error.util.js';
 
 import ipAddressController from '../controllers/ipaddress.controller.js';
@@ -9,9 +9,12 @@ import ipAddressController from '../controllers/ipaddress.controller.js';
  * @param server The MCP server instance
  */
 function register(server: McpServer) {
-	logger.debug(
-		`[src/resources/iplookup.resource.ts@register] Registering IP lookup resources...`,
+	const methodLogger = Logger.forContext(
+		'resources/ipaddress.resource.ts',
+		'register',
 	);
+	methodLogger.debug(`Registering IP lookup resources...`);
+
 	server.resource(
 		'Current Device IP',
 		'ip://current',
@@ -19,8 +22,16 @@ function register(server: McpServer) {
 			description: 'Details about your current IP address',
 		},
 		async (_uri, _extra) => {
+			const resourceMethodLogger = Logger.forContext(
+				'resources/ipaddress.resource.ts',
+				'resourceHandler',
+			);
 			try {
+				resourceMethodLogger.debug(
+					'Handling request for current IP details',
+				);
 				const resourceContent = await ipAddressController.get();
+				resourceMethodLogger.debug('Successfully retrieved IP details');
 				return {
 					contents: [
 						{
@@ -33,10 +44,7 @@ function register(server: McpServer) {
 					],
 				};
 			} catch (error) {
-				logger.error(
-					`[src/resources/ipaddress.resource.ts] Error getting IP details`,
-					error,
-				);
+				resourceMethodLogger.error(`Error getting IP details`, error);
 				return formatErrorForMcpResource(error, 'ip://current');
 			}
 		},

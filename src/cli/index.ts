@@ -1,5 +1,5 @@
 import { Command } from 'commander';
-import { logger } from '../utils/logger.util.js';
+import { Logger } from '../utils/logger.util.js';
 
 import ipAddressCli from './ipaddress.cli.js';
 
@@ -10,6 +10,9 @@ const DESCRIPTION =
 	'A boilerplate Model Context Protocol (MCP) server implementation using TypeScript';
 
 export async function runCli(args: string[]) {
+	const methodLogger = Logger.forContext('cli/index.ts', 'runCli');
+	methodLogger.debug('Processing CLI arguments', args);
+
 	const program = new Command();
 
 	program.name(NAME).description(DESCRIPTION).version(VERSION);
@@ -19,7 +22,7 @@ export async function runCli(args: string[]) {
 
 	// Handle unknown commands
 	program.on('command:*', (operands) => {
-		logger.error(`[src/cli/index.ts] Unknown command: ${operands[0]}`);
+		methodLogger.error(`Unknown command: ${operands[0]}`);
 		console.log('');
 		program.help();
 		process.exit(1);
@@ -27,4 +30,5 @@ export async function runCli(args: string[]) {
 
 	// Parse arguments; default to help if no command provided
 	await program.parseAsync(args.length ? args : ['--help'], { from: 'user' });
+	methodLogger.debug('CLI command execution completed');
 }

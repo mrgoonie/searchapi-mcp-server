@@ -8,8 +8,9 @@ describe('IP Address Controller', () => {
 			const result = await ipAddressController.get();
 
 			// Verify the result is a valid IP address format
-			expect(result.content).toContain('status: success');
-			expect(result.content).toContain('query: ');
+			expect(result.content).toContain('# IP Address Details:');
+			expect(result.content).toContain('- **status**: success');
+			expect(result.content).toContain('- **query**:');
 		}, 10000); // Increase timeout for API call
 	});
 
@@ -22,8 +23,9 @@ describe('IP Address Controller', () => {
 			const result = await ipAddressController.get(ipAddress);
 
 			// Verify the response contains expected fields
-			expect(result.content).toContain('status: success');
-			expect(result.content).toContain(`query: ${ipAddress}`);
+			expect(result.content).toContain('# IP Address Details:');
+			expect(result.content).toContain('- **status**: success');
+			expect(result.content).toContain(`- **query**: ${ipAddress}`);
 		}, 10000); // Increase timeout for API call
 
 		it('should handle invalid IP addresses', async () => {
