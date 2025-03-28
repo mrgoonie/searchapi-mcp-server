@@ -1,3 +1,10 @@
+## [1.1.2](https://github.com/aashari/boilerplate-mcp-server/compare/v1.1.1...v1.1.2) (2025-03-28)
+
+
+### Performance Improvements
+
+* **ipaddress:** enhance formatter output and optimize service implementation ([f1ccdbf](https://github.com/aashari/boilerplate-mcp-server/commit/f1ccdbf58cb2518ca979363369904255e5de275b))
+
 ## [1.1.1](https://github.com/aashari/boilerplate-mcp-server/compare/v1.1.0...v1.1.1) (2025-03-27)
 
 
