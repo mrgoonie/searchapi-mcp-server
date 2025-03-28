@@ -1,6 +1,6 @@
 {
 	"name": "@aashari/boilerplate-mcp-server",
-	"version": "1.1.1",
+	"version": "1.1.2",
 	"description": "A TypeScript-based Model Context Protocol (MCP) server boilerplate for building AI-connected tools. Features IP lookup tools, CLI support, MCP Inspector integration, and extensible architecture for connecting Claude/Anthropic AI systems to external data sources.",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
