@@ -2,7 +2,6 @@ import { Logger } from './logger.util.js';
 import { config } from './config.util.js';
 import {
 	createApiError,
-	createAuthMissingError,
 	createAuthInvalidError,
 	createUnexpectedError,
 	McpError,
@@ -185,13 +184,11 @@ export async function fetchApi<T>(
 				// Use createAuthInvalidError for consistency, even if ip-api uses keys
 				throw createAuthInvalidError(
 					'Authentication failed. Check API token if required.',
-					errorText,
 				);
 			} else if (response.status === 403) {
 				// Use createAuthInvalidError or a more specific permission error if needed
 				throw createAuthInvalidError(
 					'Permission denied for the requested resource.',
-					errorText,
 				);
 			} else if (response.status === 404) {
 				throw createApiError(
