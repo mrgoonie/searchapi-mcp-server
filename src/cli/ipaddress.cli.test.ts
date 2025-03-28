@@ -24,8 +24,9 @@ describe('IP Address CLI Commands', () => {
 			CliTestUtil.validateMarkdownOutput(result.stdout);
 			CliTestUtil.validateOutputContains(result.stdout, [
 				'# IP Address Details:',
-				'- **status**: success',
-				'- **query**:',
+				'## Location Information',
+				'## Network Information',
+				'- **IP Address**:',
 			]);
 			// Check that stderr only contains expected debug logs if DEBUG is on
 			if (process.env.DEBUG) {
@@ -44,10 +45,11 @@ describe('IP Address CLI Commands', () => {
 			expect(result.exitCode).toBe(0);
 			CliTestUtil.validateMarkdownOutput(result.stdout);
 			CliTestUtil.validateOutputContains(result.stdout, [
-				'# IP Address Details:',
-				'- **status**: success',
-				'- **query**: 8.8.8.8',
-				'- **org**: Google', // Google DNS should consistently have Google as the organization
+				'# IP Address Details: 8.8.8.8',
+				'## Location Information',
+				'## Network Information',
+				'- **IP Address**: 8.8.8.8',
+				'Google', // Google DNS should consistently have Google mentioned somewhere
 			]);
 			// Check that stderr only contains expected debug logs if DEBUG is on
 			if (process.env.DEBUG) {
@@ -84,8 +86,8 @@ describe('IP Address CLI Commands', () => {
 				// If it succeeds, validate the output format but with adjusted expectations
 				CliTestUtil.validateMarkdownOutput(result.stdout);
 				CliTestUtil.validateOutputContains(result.stdout, [
-					'# IP Address Details:',
-					'- **query**: 192.168.1.1',
+					'# IP Address Details: 192.168.1.1',
+					'- **IP Address**: 192.168.1.1',
 					// Don't expect specific fields that might be missing for private IPs
 				]);
 			} else {
@@ -124,7 +126,8 @@ describe('IP Address CLI Commands', () => {
 				CliTestUtil.validateMarkdownOutput(result.stdout);
 				CliTestUtil.validateOutputContains(result.stdout, [
 					'# IP Address Details:',
-					'- **status**: success',
+					'## Location Information',
+					'## Network Information',
 				]);
 			}
 		}, 15000);

@@ -56,13 +56,17 @@ export function getIpApiCredentials(): IpApiCredentials {
 /**
  * Fetch data from IP API
  * @param path The path/IP address to fetch data for
- * @param options Request options (method, headers, body)
+ * @param options Request options (method, headers, body, useHttps, fields, lang)
  * @returns Response data as type T
  * @throws {McpError} If the fetch fails or the response is not ok
  */
 export async function fetchIpApi<T>(
 	path: string,
-	options: RequestOptions = {},
+	options: RequestOptions & {
+		useHttps?: boolean;
+		fields?: string[];
+		lang?: string;
+	} = {},
 ): Promise<T> {
 	const methodLogger = Logger.forContext(
 		'utils/transport.util.ts',
@@ -73,22 +77,49 @@ export async function fetchIpApi<T>(
 	const credentials = getIpApiCredentials();
 
 	// Construct the full URL
-	const baseUrl = 'http://ip-api.com/json';
+	// Use https if explicitly requested
+	const protocol = options.useHttps ? 'https' : 'http';
+	const baseUrl = `${protocol}://ip-api.com/json`;
 
 	// Ensure path is formatted correctly
 	const normalizedPath = path ? `/${path}` : '';
 	let url = `${baseUrl}${normalizedPath}`;
 
+	// Prepare query parameters
+	const queryParams = new URLSearchParams();
+
 	// Add API token if available
 	if (credentials.apiToken) {
-		url += `?key=${credentials.apiToken}`;
+		queryParams.set('key', credentials.apiToken);
 		methodLogger.debug('Added API token to request');
+	}
+
+	// Add fields if specified
+	if (options.fields && options.fields.length > 0) {
+		queryParams.set('fields', options.fields.join(','));
+		methodLogger.debug(`Set fields to: ${options.fields.join(',')}`);
+	}
+
+	// Add language if specified
+	if (options.lang) {
+		queryParams.set('lang', options.lang);
+		methodLogger.debug(`Set language to: ${options.lang}`);
+	}
+
+	// Append query parameters if any
+	const queryString = queryParams.toString();
+	if (queryString) {
+		url += `?${queryString}`;
 	}
 
 	methodLogger.debug(`Calling IP API: ${url}`);
 
 	// Use the generic fetchApi function with the constructed URL
-	return fetchApi<T>(url, options);
+	return fetchApi<T>(url, {
+		method: options.method,
+		headers: options.headers,
+		body: options.body,
+	});
 }
 
 /**

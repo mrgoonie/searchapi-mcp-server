@@ -7,10 +7,11 @@ describe('IP Address Controller', () => {
 			// Call the function with the real API
 			const result = await ipAddressController.get();
 
-			// Verify the result is a valid IP address format
+			// Verify the result is a valid IP address format with our new structure
 			expect(result.content).toContain('# IP Address Details:');
-			expect(result.content).toContain('- **status**: success');
-			expect(result.content).toContain('- **query**:');
+			expect(result.content).toContain('## Location Information');
+			expect(result.content).toContain('## Network Information');
+			expect(result.content).toContain('- **IP Address**:');
 		}, 10000); // Increase timeout for API call
 	});
 
@@ -22,10 +23,12 @@ describe('IP Address Controller', () => {
 			// Call the function with the real API
 			const result = await ipAddressController.get(ipAddress);
 
-			// Verify the response contains expected fields
-			expect(result.content).toContain('# IP Address Details:');
-			expect(result.content).toContain('- **status**: success');
-			expect(result.content).toContain(`- **query**: ${ipAddress}`);
+			// Verify the response contains expected fields in our new structure
+			expect(result.content).toContain('# IP Address Details: 8.8.8.8');
+			expect(result.content).toContain('## Location Information');
+			expect(result.content).toContain('## Network Information');
+			expect(result.content).toContain(`- **IP Address**: ${ipAddress}`);
+			expect(result.content).toContain('Google'); // Google DNS should have this in org or ISP
 		}, 10000); // Increase timeout for API call
 
 		it('should handle invalid IP addresses', async () => {

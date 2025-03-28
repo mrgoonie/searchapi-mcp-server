@@ -1,5 +1,5 @@
 import { Logger } from '../utils/logger.util.js';
-import { IPDetail } from './vendor.ip-api.com.type.js';
+import { IPDetail, IPApiRequestOptions } from './vendor.ip-api.com.types.js';
 import {
 	createApiError,
 	createUnexpectedError,
@@ -15,7 +15,17 @@ const serviceLogger = Logger.forContext(
 // Log service initialization
 serviceLogger.debug('IP API service initialized');
 
-async function get(ipAddress?: string): Promise<IPDetail> {
+/**
+ * Get details for an IP address
+ * @param ipAddress Optional IP address to lookup (omit for current IP)
+ * @param options Optional request options
+ * @returns Promise containing the IP details
+ * @throws {McpError} If the request fails or the API returns an error
+ */
+async function get(
+	ipAddress?: string,
+	options: IPApiRequestOptions = {},
+): Promise<IPDetail> {
 	const methodLogger = Logger.forContext(
 		'services/vendor.ip-api.com.service.ts',
 		'get',
@@ -24,10 +34,13 @@ async function get(ipAddress?: string): Promise<IPDetail> {
 
 	try {
 		// Use the centralized fetchIpApi utility
-		// Explicitly type the expected response structure
 		const data = await fetchIpApi<
 			{ status: string; message?: string } & IPDetail
-		>(ipAddress || '');
+		>(ipAddress || '', {
+			useHttps: options.useHttps,
+			fields: options.fields,
+			lang: options.lang,
+		});
 
 		// Handle API-level success/failure specific to ip-api.com
 		if (data.status !== 'success') {
