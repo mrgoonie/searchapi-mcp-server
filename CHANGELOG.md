@@ -1,3 +1,10 @@
+## [1.1.3](https://github.com/aashari/boilerplate-mcp-server/compare/v1.1.2...v1.1.3) (2025-03-28)
+
+
+### Bug Fixes
+
+* correct TypeScript errors in transport utility ([573a7e6](https://github.com/aashari/boilerplate-mcp-server/commit/573a7e63e1985aa5aefd806c0902462fa34c14d7))
+
 ## [1.1.2](https://github.com/aashari/boilerplate-mcp-server/compare/v1.1.1...v1.1.2) (2025-03-28)
 
 

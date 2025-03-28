@@ -14,7 +14,7 @@ import ipLookupResources from './resources/ipaddress.resource.js';
 const indexLogger = Logger.forContext('index.ts');
 
 // Define version constant for easier management and consistent versioning
-const VERSION = '1.1.2';
+const VERSION = '1.1.3';
 
 let serverInstance: McpServer | null = null;
 let transportInstance: SSEServerTransport | StdioServerTransport | null = null;
