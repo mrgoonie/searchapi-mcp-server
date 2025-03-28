@@ -7,8 +7,14 @@ import { formatErrorForMcpTool } from '../utils/error.util.js';
 import ipAddressController from '../controllers/ipaddress.controller.js';
 
 /**
- * Get IP Address details using the controller.
- * Maps tool arguments to controller options and formats the response.
+ * @function getIpAddressDetails
+ * @description MCP Tool handler to retrieve details for a given IP address (or the current IP).
+ *              It calls the ipAddressController to fetch the data and formats the response for the MCP.
+ *
+ * @param {IpAddressToolArgsType} args - Arguments provided to the tool, including the optional IP address and options.
+ * @param {RequestHandlerExtra} _extra - Additional request context (unused).
+ * @returns {Promise<{ content: Array<{ type: 'text', text: string }> }>} Formatted response for the MCP.
+ * @throws {McpError} Formatted error if the controller or service layer encounters an issue.
  */
 async function getIpAddressDetails(
 	args: IpAddressToolArgsType,
@@ -55,7 +61,10 @@ async function getIpAddressDetails(
 }
 
 /**
- * Register IP address tools with the MCP server
+ * @function register
+ * @description Registers the IP address lookup tool ('get-ip-details') with the MCP server.
+ *
+ * @param {McpServer} server - The MCP server instance.
  */
 function register(server: McpServer) {
 	const methodLogger = Logger.forContext(
@@ -68,7 +77,8 @@ function register(server: McpServer) {
 		'get-ip-details',
 		`Get details about a specific IP address or the current device's public IP address.
 
-            PURPOSE: Retrieves geolocation information (country, city, region, coordinates), ISP, and organization details associated with an IP address. Provides network and geographical context for an IP, which is useful for security analysis, debugging, or location verification.
+            PURPOSE:
+            Retrieves geolocation information (country, city, region, coordinates), ISP, and organization details associated with an IP address. Provides network and geographical context for an IP, which is useful for security analysis, debugging, or location verification.
 
             WHEN TO USE:
             - To find the geographical location of a given IP address (country, region, city, coordinates).
@@ -79,38 +89,37 @@ function register(server: McpServer) {
             - When investigating suspicious IP addresses in logs.
 
             WHEN NOT TO USE:
-            - For internal/private IP addresses (10.x.x.x, 192.168.x.x, etc.) as this tool queries a public database.
+            - For internal/private IP addresses (e.g., 10.x.x.x, 192.168.x.x) as this tool queries a public database.
             - When you need historical IP data (this provides current lookup only).
-            - For precise geolocation (IP geolocation has limited accuracy, especially in rural areas).
+            - For precise geolocation (IP geolocation accuracy is limited).
             - For operations other than retrieving IP geolocation details.
-            - When you need to process large batches of IPs (use appropriate rate limiting).
+            - When processing large batches of IPs without considering rate limits.
 
-            RETURNS: Formatted Markdown containing:
+            RETURNS:
+            Formatted Markdown containing:
             - Location information (country, region, city, postal code, coordinates)
-            - Network details (ISP, organization, AS number)
-            - A link to view the location on a map
-            - Timestamp of when the information was retrieved
-
-            With extended data (when includeExtendedData=true), additional information may include:
-            - Mobile network detection
-            - Proxy/VPN detection
-            - Hosting provider detection
-            - Reverse DNS information
+            - Network details (ISP, organization, AS number/name)
+            - A link to view the location on a map.
+            - Timestamp of when the information was retrieved.
+            - With 'includeExtendedData=true', additional details like reverse DNS, mobile/proxy/hosting detection may be included.
 
             EXAMPLES:
             - Get details for a specific IP: { ipAddress: "8.8.8.8" }
-            - Get details with extended data: { ipAddress: "8.8.8.8", includeExtendedData: true }
-            - Get details for current device with HTTPS: { useHttps: true }
+            - Get details with extended data: { ipAddress: "1.1.1.1", includeExtendedData: true }
+            - Get details for current device using HTTPS: { useHttps: true }
             - Get basic details for current device: {}
 
             ERRORS:
-            - Invalid IP format: If the provided 'ipAddress' is not a valid IP address format.
-            - Private/Reserved IP: If the IP address is in a private or reserved range.
-            - API errors: If the external ip-api.com service fails or rejects the request.
-            - Rate limiting: If too many requests are made in a short period.`,
+            - Invalid IP format: If 'ipAddress' is not a valid IPv4 or IPv6 format.
+            - Private/Reserved IP: If the IP address is in a private or reserved range (per ip-api.com rules).
+            - API errors: If the external ip-api.com service fails, rejects the request (e.g., bad token), or returns an error status.
+            - Rate limiting: If the ip-api.com service rate limits the request.
+            - Network errors: If the request to ip-api.com fails due to network issues.`, // Keep Zod schema reference
 		IpAddressToolArgs.shape,
 		getIpAddressDetails,
 	);
+
+	methodLogger.debug('Successfully registered get-ip-details tool.');
 }
 
 export default { register };

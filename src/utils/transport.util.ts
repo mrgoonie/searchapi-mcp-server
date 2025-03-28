@@ -2,6 +2,8 @@ import { Logger } from './logger.util.js';
 import { config } from './config.util.js';
 import {
 	createApiError,
+	createAuthMissingError,
+	createAuthInvalidError,
 	createUnexpectedError,
 	McpError,
 } from './error.util.js';
@@ -13,10 +15,11 @@ const transportLogger = Logger.forContext('utils/transport.util.ts');
 transportLogger.debug('Transport utility initialized');
 
 /**
- * Interface for IP API credentials
+ * Interface for IP API credentials.
+ * Note: API token is optional for the free tier.
  */
 export interface IpApiCredentials {
-	apiToken: string | undefined;
+	apiToken?: string;
 }
 
 /**
@@ -29,8 +32,9 @@ export interface RequestOptions {
 }
 
 /**
- * Get IP API credentials from environment variables
- * @returns IpApiCredentials object containing the API token (which may be undefined if not set)
+ * Retrieves IP API credentials from configuration.
+ * Specifically checks for IPAPI_API_TOKEN.
+ * @returns IpApiCredentials object containing the API token if found.
  */
 export function getIpApiCredentials(): IpApiCredentials {
 	const methodLogger = Logger.forContext(
@@ -42,23 +46,27 @@ export function getIpApiCredentials(): IpApiCredentials {
 
 	if (!apiToken) {
 		methodLogger.debug(
-			'No IP API token found. The API will be used in free tier mode.',
+			'No IP API token found (IPAPI_API_TOKEN). Using free tier.',
 		);
+		return {}; // Return empty object if no token
 	} else {
-		methodLogger.debug('Using IP API token from configuration');
+		methodLogger.debug('Using IP API token from configuration.');
+		return { apiToken };
 	}
-
-	return {
-		apiToken,
-	};
 }
 
 /**
- * Fetch data from IP API
- * @param path The path/IP address to fetch data for
- * @param options Request options (method, headers, body, useHttps, fields, lang)
- * @returns Response data as type T
- * @throws {McpError} If the fetch fails or the response is not ok
+ * Fetches data specifically from the ip-api.com endpoint.
+ * Handles URL construction, authentication (if token provided), and query parameters.
+ * Relies on the generic fetchApi function for the actual HTTP request.
+ *
+ * @param path The specific IP address or path component (e.g., "8.8.8.8"). Empty string for current IP.
+ * @param options Additional options like HTTP method, headers, body, and ip-api specific params.
+ * @param options.useHttps - Use HTTPS (requires paid plan for ip-api.com). Defaults to false.
+ * @param options.fields - Specific fields to request from ip-api.com.
+ * @param options.lang - Language code for response data.
+ * @returns The response data parsed as type T.
+ * @throws {McpError} If the request fails, including network errors, API errors, or parsing issues.
  */
 export async function fetchIpApi<T>(
 	path: string,
@@ -73,48 +81,47 @@ export async function fetchIpApi<T>(
 		'fetchIpApi',
 	);
 
-	// Get credentials
+	// Get credentials (token might be undefined)
 	const credentials = getIpApiCredentials();
 
-	// Construct the full URL
-	// Use https if explicitly requested
+	// Determine protocol based on options
 	const protocol = options.useHttps ? 'https' : 'http';
 	const baseUrl = `${protocol}://ip-api.com/json`;
 
-	// Ensure path is formatted correctly
+	// Format path for URL
 	const normalizedPath = path ? `/${path}` : '';
 	let url = `${baseUrl}${normalizedPath}`;
 
-	// Prepare query parameters
+	// Build query parameters
 	const queryParams = new URLSearchParams();
 
-	// Add API token if available
+	// Add API token if present
 	if (credentials.apiToken) {
 		queryParams.set('key', credentials.apiToken);
-		methodLogger.debug('Added API token to request');
+		methodLogger.debug('API token added to query parameters.');
 	}
 
-	// Add fields if specified
-	if (options.fields && options.fields.length > 0) {
+	// Add fields parameter
+	if (options.fields?.length) {
 		queryParams.set('fields', options.fields.join(','));
-		methodLogger.debug(`Set fields to: ${options.fields.join(',')}`);
+		methodLogger.debug(`Requesting fields: ${options.fields.join(',')}`);
 	}
 
-	// Add language if specified
+	// Add language parameter
 	if (options.lang) {
 		queryParams.set('lang', options.lang);
-		methodLogger.debug(`Set language to: ${options.lang}`);
+		methodLogger.debug(`Requesting language: ${options.lang}`);
 	}
 
-	// Append query parameters if any
+	// Append query string if needed
 	const queryString = queryParams.toString();
 	if (queryString) {
 		url += `?${queryString}`;
 	}
 
-	methodLogger.debug(`Calling IP API: ${url}`);
+	methodLogger.debug(`Constructed URL: ${url}`);
 
-	// Use the generic fetchApi function with the constructed URL
+	// Delegate the actual fetch call to the generic fetchApi
 	return fetchApi<T>(url, {
 		method: options.method,
 		headers: options.headers,
@@ -123,12 +130,13 @@ export async function fetchIpApi<T>(
 }
 
 /**
- * Generic function to fetch data from an API endpoint.
- * Handles basic HTTP error checking and logging.
+ * Generic and reusable function to fetch data from any API endpoint.
+ * Handles standard HTTP request setup, response checking, basic error handling, and logging.
+ *
  * @param url The full URL to fetch data from.
- * @param options Request options (method, headers, body).
- * @returns Response data as type T.
- * @throws {McpError} If the fetch fails or the response is not ok.
+ * @param options Request options including method, headers, and body.
+ * @returns The response data parsed as type T.
+ * @throws {McpError} If the request fails, including network errors, non-OK HTTP status, or JSON parsing issues.
  */
 export async function fetchApi<T>(
 	url: string,
@@ -139,67 +147,100 @@ export async function fetchApi<T>(
 		'fetchApi',
 	);
 
-	// Prepare request options
+	// Prepare standard request options
 	const requestOptions: RequestInit = {
 		method: options.method || 'GET',
 		headers: {
+			// Standard headers, allow overrides via options.headers
 			'Content-Type': 'application/json',
 			Accept: 'application/json',
-			...options.headers, // Allow overriding default headers
+			...options.headers,
 		},
 		body: options.body ? JSON.stringify(options.body) : undefined,
 	};
 
-	methodLogger.debug(`Calling API: ${requestOptions.method} ${url}`);
+	methodLogger.debug(`Executing API call: ${requestOptions.method} ${url}`);
+	const startTime = performance.now(); // Track performance
 
 	try {
 		const response = await fetch(url, requestOptions);
+		const endTime = performance.now();
+		const duration = (endTime - startTime).toFixed(2);
 
-		// Log the raw response status and headers
 		methodLogger.debug(
-			`Raw response received: ${response.status} ${response.statusText}`,
-			{
-				url,
-				status: response.status,
-				statusText: response.statusText,
-				headers: {
-					// Log simplified headers
-					contentType: response.headers.get('content-type'),
-					contentLength: response.headers.get('content-length'),
-				},
-			},
+			`API call completed in ${duration}ms with status: ${response.status} ${response.statusText}`,
+			{ url, status: response.status },
 		);
 
+		// Check if the response status is OK (2xx)
 		if (!response.ok) {
-			const errorText = await response.text();
+			const errorText = await response.text(); // Get error body for context
 			methodLogger.error(
-				`API error: ${response.status} ${response.statusText}`,
+				`API error response (${response.status}):`,
 				errorText,
 			);
 
-			// Create a generic API error
-			throw createApiError(
-				`API request failed: ${response.status} ${response.statusText}`,
-				response.status,
-				errorText,
-			);
+			// Classify standard HTTP errors
+			if (response.status === 401) {
+				// Use createAuthInvalidError for consistency, even if ip-api uses keys
+				throw createAuthInvalidError(
+					'Authentication failed. Check API token if required.',
+					errorText,
+				);
+			} else if (response.status === 403) {
+				// Use createAuthInvalidError or a more specific permission error if needed
+				throw createAuthInvalidError(
+					'Permission denied for the requested resource.',
+					errorText,
+				);
+			} else if (response.status === 404) {
+				throw createApiError(
+					'Resource not found at the specified URL.',
+					response.status,
+					errorText,
+				);
+			} else {
+				// Generic API error for other non-2xx statuses
+				throw createApiError(
+					`API request failed with status ${response.status}: ${response.statusText}`,
+					response.status,
+					errorText,
+				);
+			}
 		}
 
-		// Attempt to parse JSON
-		const responseData = await response.json();
-		methodLogger.debug(`Response body parsed successfully.`);
-		// methodLogger.debug(`Response body:`, responseData); // Optionally log full body
-
-		return responseData as T;
+		// Attempt to parse the response body as JSON
+		try {
+			const responseData = await response.json();
+			methodLogger.debug('Response body successfully parsed as JSON.');
+			// methodLogger.debug('Response Data:', responseData); // Uncomment for full response logging
+			return responseData as T;
+		} catch (parseError) {
+			methodLogger.error(
+				'Failed to parse API response JSON:',
+				parseError,
+			);
+			// Throw a specific error for JSON parsing failure
+			throw createApiError(
+				`Failed to parse API response JSON: ${parseError instanceof Error ? parseError.message : String(parseError)}`,
+				response.status, // Include original status for context
+				parseError,
+			);
+		}
 	} catch (error) {
-		methodLogger.error(`Request failed for ${url}`, error);
+		const endTime = performance.now();
+		const duration = (endTime - startTime).toFixed(2);
+		methodLogger.error(
+			`API call failed after ${duration}ms for ${url}:`,
+			error,
+		);
 
-		// Rethrow known McpErrors (like the one from createApiError)
+		// Rethrow if it's already an McpError (e.g., from status checks or parsing)
 		if (error instanceof McpError) {
 			throw error;
 		}
 
-		// Handle network or fetch-specific errors
+		// Handle potential network errors (TypeError in fetch)
 		if (error instanceof TypeError) {
 			throw createApiError(
 				`Network error during API call: ${error.message}`,
@@ -207,16 +248,8 @@ export async function fetchApi<T>(
 				error,
 			);
 		}
-		// Handle JSON parsing errors
-		if (error instanceof SyntaxError) {
-			throw createApiError(
-				`Failed to parse API response JSON: ${error.message}`,
-				undefined, // No specific HTTP status for parsing errors
-				error,
-			);
-		}
 
-		// Wrap unknown errors
+		// Wrap any other unexpected errors
 		throw createUnexpectedError(
 			`Unexpected error during API call: ${error instanceof Error ? error.message : String(error)}`,
 			error,

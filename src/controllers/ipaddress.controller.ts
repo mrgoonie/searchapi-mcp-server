@@ -8,10 +8,21 @@ import { GetIpOptions } from './ipaddress.types.js';
 import { IPApiRequestOptions } from '../services/vendor.ip-api.com.types.js';
 
 /**
- * Get IP address details from the IP API.
- * @param ipAddress Optional IP address to lookup (omit for current IP)
- * @param options Optional configuration for the request
- * @returns Controller response with formatted content
+ * @namespace IpAddressController
+ * @description Controller responsible for handling IP address lookup logic.
+ *              It orchestrates calls to the ip-api.com service, applies defaults,
+ *              maps options, and formats the response using the formatter.
+ */
+
+/**
+ * @function get
+ * @description Fetches details for a specific IP address or the current device's IP.
+ *              Handles mapping controller options (like includeExtendedData) to service parameters (fields).
+ * @memberof IpAddressController
+ * @param {string} [ipAddress] - Optional IP address to look up. If omitted, the service will fetch the current device's public IP.
+ * @param {GetIpOptions} [options={}] - Optional configuration for the request, such as `includeExtendedData` and `useHttps`.
+ * @returns {Promise<ControllerResponse>} A promise that resolves to the standard controller response containing the formatted IP details in Markdown.
+ * @throws {McpError} Throws an McpError (handled by `handleControllerError`) if the service call fails or returns an error.
  */
 async function get(
 	ipAddress?: string,

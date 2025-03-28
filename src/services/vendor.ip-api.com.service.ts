@@ -16,11 +16,29 @@ const serviceLogger = Logger.forContext(
 serviceLogger.debug('IP API service initialized');
 
 /**
- * Get details for an IP address
- * @param ipAddress Optional IP address to lookup (omit for current IP)
- * @param options Optional request options
- * @returns Promise containing the IP details
- * @throws {McpError} If the request fails or the API returns an error
+ * @namespace VendorIpApiService
+ * @description Service layer for interacting directly with the ip-api.com vendor API.
+ *              Responsible for constructing API requests based on provided parameters
+ *              and handling the raw response from the `fetchIpApi` utility.
+ */
+
+/**
+ * @function get
+ * @description Fetches details for a specific IP address or the current device's IP from ip-api.com.
+ *              It uses the `fetchIpApi` utility and handles the specific success/failure status returned by ip-api.com.
+ * @memberof VendorIpApiService
+ * @param {string} [ipAddress] - Optional IP address to look up. If omitted, fetches details for the current device's public IP.
+ * @param {IPApiRequestOptions} [options={}] - Optional request options for the ip-api.com service, such as `useHttps`, `fields`, and `lang`.
+ * @returns {Promise<IPDetail>} A promise that resolves to the detailed IP information if the API call is successful.
+ * @throws {McpError} Throws an `McpError` (specifically `ApiError` or `UnexpectedError`) if:
+ *  - The `fetchIpApi` call fails (network error, non-2xx response).
+ *  - The ip-api.com response status is not 'success'.
+ *  - An unexpected error occurs during processing.
+ * @example
+ * // Get basic details for 8.8.8.8
+ * const details = await get('8.8.8.8');
+ * // Get extended details using HTTPS
+ * const extendedDetails = await get('1.1.1.1', { useHttps: true, fields: [...] });
  */
 async function get(
 	ipAddress?: string,
