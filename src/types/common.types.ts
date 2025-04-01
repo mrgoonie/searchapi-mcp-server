@@ -76,4 +76,4 @@ export interface ControllerResponse {
 	 * If present, indicates that more results are available.
 	 */
 	pagination?: ResponsePagination;
-} 
+}
