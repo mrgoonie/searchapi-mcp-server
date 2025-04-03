@@ -269,4 +269,5 @@ class Logger {
 	}
 }
 
+// Only export the Logger class to enforce contextual logging via Logger.forContext
 export { Logger };
