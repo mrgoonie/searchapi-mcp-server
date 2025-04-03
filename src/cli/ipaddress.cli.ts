@@ -9,8 +9,8 @@ import ipAddressController from '../controllers/ipaddress.controller.js';
  * @param program The Commander program instance
  */
 function register(program: Command) {
-	const methodLogger = Logger.forContext('cli/ipaddress.cli.ts', 'register');
-	methodLogger.debug(`Registering IP address CLI commands...`);
+	const cliLogger = Logger.forContext('cli/ipaddress.cli.ts', 'register');
+	cliLogger.debug(`Registering IP address CLI commands...`);
 
 	program
 		.command('get-ip-details')
@@ -45,13 +45,13 @@ function register(program: Command) {
 				ipAddress?: string,
 				cmdOptions?: { extended?: boolean; https?: boolean },
 			) => {
-				const actionLogger = Logger.forContext(
+				const commandLogger = Logger.forContext(
 					'cli/ipaddress.cli.ts',
 					'get-ip-details',
 				);
 				try {
-					actionLogger.debug(
-						`Fetching IP details for ${ipAddress || 'current device'}...`,
+					commandLogger.debug(
+						`Processing IP details request for ${ipAddress || 'current device'}`,
 						cmdOptions,
 					);
 
@@ -61,20 +61,23 @@ function register(program: Command) {
 						useHttps: cmdOptions?.https || false,
 					};
 
+					commandLogger.debug(
+						'Calling controller with options',
+						controllerOptions,
+					);
 					const result = await ipAddressController.get(
 						ipAddress,
 						controllerOptions,
 					);
-					actionLogger.debug(
-						`IP details fetched successfully`,
-						result,
-					);
+					commandLogger.debug(`IP details retrieved successfully`);
 					console.log(result.content);
 				} catch (error) {
 					handleCliError(error);
 				}
 			},
 		);
+
+	cliLogger.debug('IP address CLI commands registered successfully');
 }
 
 export default { register };
