@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/aashari/boilerplate-mcp-server/compare/v1.2.0...v1.2.1) (2025-04-03)
+
+
+### Bug Fixes
+
+* **logger:** ensure consistent logger implementation across all projects ([ec37c74](https://github.com/aashari/boilerplate-mcp-server/commit/ec37c74ec75cc3eaf09042e51213c27145cf8f44))
+
 # [1.2.0](https://github.com/aashari/boilerplate-mcp-server/compare/v1.1.3...v1.2.0) (2025-04-03)
 
 
