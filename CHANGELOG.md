@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/aashari/boilerplate-mcp-server/compare/v1.2.2...v1.3.0) (2025-04-03)
+
+
+### Features
+
+* **logging:** add file logging with session ID to ~/.mcp/data/ ([0448918](https://github.com/aashari/boilerplate-mcp-server/commit/0448918908b6bd3d56cec94fdf768d2410973631))
+
 ## [1.2.2](https://github.com/aashari/boilerplate-mcp-server/compare/v1.2.1...v1.2.2) (2025-04-03)
 
 
