@@ -1,5 +1,6 @@
 import { Command } from 'commander';
 import { Logger } from '../utils/logger.util.js';
+import { VERSION, CLI_NAME } from '../utils/constants.util.js';
 
 import ipAddressCli from './ipaddress.cli.js';
 
@@ -8,9 +9,7 @@ import ipAddressCli from './ipaddress.cli.js';
  * Handles command registration, parsing, and execution
  */
 
-// Get the version from package.json
-const VERSION = '1.1.3'; // This should match the version in src/index.ts
-const NAME = '@aashari/boilerplate-mcp-server';
+// Package description
 const DESCRIPTION =
 	'A boilerplate Model Context Protocol (MCP) server implementation using TypeScript';
 
@@ -26,7 +25,7 @@ export async function runCli(args: string[]) {
 
 	const program = new Command();
 
-	program.name(NAME).description(DESCRIPTION).version(VERSION);
+	program.name(CLI_NAME).description(DESCRIPTION).version(VERSION);
 
 	// Register CLI commands
 	cliLogger.debug('Registering CLI commands...');

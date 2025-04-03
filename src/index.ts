@@ -5,6 +5,7 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { Logger } from './utils/logger.util.js';
 import { config } from './utils/config.util.js';
 import { createUnexpectedError } from './utils/error.util.js';
+import { VERSION, PACKAGE_NAME } from './utils/constants.util.js';
 import { runCli } from './cli/index.js';
 
 // Import tools and resources
@@ -23,9 +24,6 @@ const indexLogger = Logger.forContext('index.ts');
 
 // Log initialization at debug level
 indexLogger.debug('Boilerplate MCP server module loaded');
-
-// Define version constant for easier management and consistent versioning
-const VERSION = '1.1.3';
 
 let serverInstance: McpServer | null = null;
 let transportInstance: SSEServerTransport | StdioServerTransport | null = null;
@@ -58,7 +56,7 @@ export async function startServer(mode: 'stdio' | 'sse' = 'stdio') {
 
 	serverLogger.info(`Initializing Boilerplate MCP server v${VERSION}`);
 	serverInstance = new McpServer({
-		name: '@aashari/boilerplate-mcp-server',
+		name: PACKAGE_NAME,
 		version: VERSION,
 	});
 
@@ -135,3 +133,4 @@ if (require.main === module) {
 // Export key utilities for library users
 export { config };
 export { Logger };
+export { VERSION, PACKAGE_NAME } from './utils/constants.util.js';
