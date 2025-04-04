@@ -70,10 +70,10 @@ export async function startServer(mode: 'stdio' | 'sse' = 'stdio') {
 	// Register tools and resources
 	serverLogger.info('Registering MCP tools and resources...');
 
-	ipAddressTools.register(serverInstance);
+	ipAddressTools.registerTools(serverInstance);
 	serverLogger.debug('Registered IP address tools');
 
-	ipLookupResources.register(serverInstance);
+	ipLookupResources.registerResources(serverInstance);
 	serverLogger.debug('Registered IP lookup resources');
 
 	serverLogger.info('All tools and resources registered successfully');

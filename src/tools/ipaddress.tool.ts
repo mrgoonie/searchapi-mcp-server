@@ -61,15 +61,15 @@ async function getIpAddressDetails(
 }
 
 /**
- * @function register
+ * @function registerTools
  * @description Registers the IP address lookup tool ('get-ip-details') with the MCP server.
  *
  * @param {McpServer} server - The MCP server instance.
  */
-function register(server: McpServer) {
+function registerTools(server: McpServer) {
 	const methodLogger = Logger.forContext(
 		'tools/ipaddress.tool.ts',
-		'register',
+		'registerTools',
 	);
 	methodLogger.debug(`Registering IP address tools...`);
 
@@ -122,4 +122,4 @@ function register(server: McpServer) {
 	methodLogger.debug('Successfully registered get-ip-details tool.');
 }
 
-export default { register };
+export default { registerTools };

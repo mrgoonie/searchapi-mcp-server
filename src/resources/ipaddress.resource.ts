@@ -8,10 +8,10 @@ import ipAddressController from '../controllers/ipaddress.controller.js';
  * Register IP lookup resources with the MCP server
  * @param server The MCP server instance
  */
-function register(server: McpServer) {
+function registerResources(server: McpServer) {
 	const methodLogger = Logger.forContext(
 		'resources/ipaddress.resource.ts',
-		'register',
+		'registerResources',
 	);
 	methodLogger.debug(`Registering IP lookup resources...`);
 
@@ -111,4 +111,4 @@ function register(server: McpServer) {
 	);
 }
 
-export default { register };
+export default { registerResources };
