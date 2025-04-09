@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/aashari/boilerplate-mcp-server/compare/v1.3.0...v1.3.1) (2025-04-04)
+
+
+### Bug Fixes
+
+* update function references from register to registerTools and registerResources ([393cff2](https://github.com/aashari/boilerplate-mcp-server/commit/393cff298f7ddafb6a927b882d5731aa924df783))
+
 # [1.3.0](https://github.com/aashari/boilerplate-mcp-server/compare/v1.2.2...v1.3.0) (2025-04-03)
 
 
