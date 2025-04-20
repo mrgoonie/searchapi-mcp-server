@@ -1,3 +1,10 @@
+## [1.3.3](https://github.com/aashari/boilerplate-mcp-server/compare/v1.3.2...v1.3.3) (2025-04-20)
+
+
+### Bug Fixes
+
+* Update dependencies and fix related type errors ([dfdec0a](https://github.com/aashari/boilerplate-mcp-server/commit/dfdec0a1e314b96fa76000058bc7d48efd2c9dee))
+
 ## [1.3.2](https://github.com/aashari/boilerplate-mcp-server/compare/v1.3.1...v1.3.2) (2025-04-09)
 
 
