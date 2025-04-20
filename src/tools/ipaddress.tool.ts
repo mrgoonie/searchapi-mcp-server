@@ -1,6 +1,5 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { Logger } from '../utils/logger.util.js';
-import { RequestHandlerExtra } from '@modelcontextprotocol/sdk/shared/protocol.js';
 import { IpAddressToolArgs, IpAddressToolArgsType } from './ipaddress.types.js';
 import { formatErrorForMcpTool } from '../utils/error.util.js';
 
@@ -12,14 +11,11 @@ import ipAddressController from '../controllers/ipaddress.controller.js';
  *              It calls the ipAddressController to fetch the data and formats the response for the MCP.
  *
  * @param {IpAddressToolArgsType} args - Arguments provided to the tool, including the optional IP address and options.
- * @param {RequestHandlerExtra} _extra - Additional request context (unused).
+ * @param {RequestHandlerExtra<any, any>} _extra - Additional request context (unused, typed as any).
  * @returns {Promise<{ content: Array<{ type: 'text', text: string }> }>} Formatted response for the MCP.
  * @throws {McpError} Formatted error if the controller or service layer encounters an issue.
  */
-async function getIpAddressDetails(
-	args: IpAddressToolArgsType,
-	_extra: RequestHandlerExtra,
-) {
+async function getIpAddressDetails(args: IpAddressToolArgsType) {
 	const methodLogger = Logger.forContext(
 		'tools/ipaddress.tool.ts',
 		'getIpAddressDetails',
