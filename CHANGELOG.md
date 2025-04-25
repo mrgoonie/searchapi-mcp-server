@@ -1,3 +1,11 @@
+## [1.3.5](https://github.com/aashari/boilerplate-mcp-server/compare/v1.3.4...v1.3.5) (2025-04-25)
+
+
+### Bug Fixes
+
+* rename IP tool to 'ip_get_details' for naming consistency ([fb2a5c6](https://github.com/aashari/boilerplate-mcp-server/commit/fb2a5c6df0766f608e5e06f6f13326a4821e6760))
+* unify tool description for clarity and consistency ([006460b](https://github.com/aashari/boilerplate-mcp-server/commit/006460bacd1413b3254e45c6085b07f27a468898))
+
 ## [1.3.4](https://github.com/aashari/boilerplate-mcp-server/compare/v1.3.3...v1.3.4) (2025-04-22)
 
 
