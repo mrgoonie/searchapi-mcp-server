@@ -70,8 +70,8 @@ function registerTools(server: McpServer) {
 	methodLogger.debug(`Registering IP address tools...`);
 
 	server.tool(
-		'get-ip-details',
-		`Get details about a specific IP address or the current device's public IP address.
+		'ip_get_details',
+		`Get geolocation and network details for an IP address.
 
             PURPOSE:
             Retrieves geolocation information (country, city, region, coordinates), ISP, and organization details associated with an IP address. Provides network and geographical context for an IP, which is useful for security analysis, debugging, or location verification.
