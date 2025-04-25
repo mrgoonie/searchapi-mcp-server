@@ -71,7 +71,46 @@ function registerTools(server: McpServer) {
 
 	server.tool(
 		'ip_get_details',
-		`Retrieves geolocation and network details for a public IP address (\`ipAddress\`). If no IP is provided, returns details for the server's current public IP.\n- Fetches country, city, region, coordinates, ISP, and organization.\n- Optional \`includeExtendedData\` can provide reverse DNS, mobile/proxy/hosting detection.\nUse this to get geographical or network context for a public IP address.\nReturns formatted Markdown with location, network details, map link, and timestamp.\n**Note:** Does not work for private/reserved IP addresses. Relies on the external ip-api.com service.`,
+		`Get geolocation and network details for an IP address.
+
+            PURPOSE:
+            Retrieves geolocation information (country, city, region, coordinates), ISP, and organization details associated with an IP address. Provides network and geographical context for an IP, which is useful for security analysis, debugging, or location verification.
+
+            WHEN TO USE:
+            - To find the geographical location of a given IP address (country, region, city, coordinates).
+            - To identify the ISP or organization owning an IP address.
+            - To get your own public IP address details (by omitting the 'ipAddress' argument).
+            - When analyzing network traffic or connections for geographical context.
+            - When verifying a user's approximate location based on their IP.
+            - When investigating suspicious IP addresses in logs.
+
+            WHEN NOT TO USE:
+            - For internal/private IP addresses (e.g., 10.x.x.x, 192.168.x.x) as this tool queries a public database.
+            - When you need historical IP data (this provides current lookup only).
+            - For precise geolocation (IP geolocation accuracy is limited).
+            - For operations other than retrieving IP geolocation details.
+            - When processing large batches of IPs without considering rate limits.
+
+            RETURNS:
+            Formatted Markdown containing:
+            - Location information (country, region, city, postal code, coordinates)
+            - Network details (ISP, organization, AS number/name)
+            - A link to view the location on a map.
+            - Timestamp of when the information was retrieved.
+            - With 'includeExtendedData=true', additional details like reverse DNS, mobile/proxy/hosting detection may be included.
+
+            EXAMPLES:
+            - Get details for a specific IP: { ipAddress: "8.8.8.8" }
+            - Get details with extended data: { ipAddress: "1.1.1.1", includeExtendedData: true }
+            - Get details for current device using HTTPS: { useHttps: true }
+            - Get basic details for current device: {}
+
+            ERRORS:
+            - Invalid IP format: If 'ipAddress' is not a valid IPv4 or IPv6 format.
+            - Private/Reserved IP: If the IP address is in a private or reserved range (per ip-api.com rules).
+            - API errors: If the external ip-api.com service fails, rejects the request (e.g., bad token), or returns an error status.
+            - Rate limiting: If the ip-api.com service rate limits the request.
+            - Network errors: If the request to ip-api.com fails due to network issues.`, // Keep Zod schema reference
 		IpAddressToolArgs.shape,
 		getIpAddressDetails,
 	);
