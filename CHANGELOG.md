@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/aashari/boilerplate-mcp-server/compare/v1.3.5...v1.4.0) (2025-04-30)
+
+
+### Features
+
+* Support multiple keys for global config lookup ([49c26f1](https://github.com/aashari/boilerplate-mcp-server/commit/49c26f16d6f8c1baa29097c213e6fcfc65f5c809))
+
 ## [1.3.5](https://github.com/aashari/boilerplate-mcp-server/compare/v1.3.4...v1.3.5) (2025-04-25)
 
 
