@@ -371,3 +371,16 @@ When ready to publish your custom MCP server:
 # License
 
 [ISC License](https://opensource.org/licenses/ISC)
+
+```json
+{
+	"boilerplate": {
+		"environments": {
+			"DEBUG": "true",
+			"ANY_OTHER_CONFIG": "value"
+		}
+	}
+}
+```
+
+**Note:** For backward compatibility, the server will also recognize configurations under the full package name (`@aashari/boilerplate-mcp-server`) or the unscoped package name (`boilerplate-mcp-server`) if the `boilerplate` key is not found. However, using the short `boilerplate` key is recommended for new configurations.
