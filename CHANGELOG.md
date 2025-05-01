@@ -1,3 +1,10 @@
+## [1.4.2](https://github.com/aashari/boilerplate-mcp-server/compare/v1.4.1...v1.4.2) (2025-05-01)
+
+
+### Bug Fixes
+
+* align ipaddress CLI descriptions with tool/schema ([1eeaeeb](https://github.com/aashari/boilerplate-mcp-server/commit/1eeaeeb8ee4bd425abe135cb4d2717278e7aa617))
+
 ## [1.4.1](https://github.com/aashari/boilerplate-mcp-server/compare/v1.4.0...v1.4.1) (2025-04-30)
 
 
