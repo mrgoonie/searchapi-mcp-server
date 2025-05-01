@@ -15,23 +15,9 @@ function register(program: Command) {
 	program
 		.command('get-ip-details')
 		.description(
-			`Get geolocation and network details about an IP address or the current device.
-
-        PURPOSE: Retrieve comprehensive information about an IP address including geographical location, ISP, organization, and network details.
-        
-        Use Case: Useful for identifying the location of an IP address, determining network ownership, or checking your own public IP information.
-        
-        Output: Formatted Markdown containing location data (country, region, city), network information (ISP, organization, AS number), coordinates, and a link to view the location on a map.
-        
-        Examples:
-  $ mcp-ipaddress get-ip-details
-  $ mcp-ipaddress get-ip-details 8.8.8.8
-  $ mcp-ipaddress get-ip-details 1.1.1.1`,
+			`Get geolocation and network details about an IP address or the current device.`,
 		)
-		.argument(
-			'[ipAddress]',
-			'IP address to lookup (optional, omit for current device)',
-		)
+		.argument('[ipAddress]', 'IP address to lookup (omit for current IP)')
 		.option(
 			'--extended',
 			'Include extended data like ASN, mobile and proxy detection',
