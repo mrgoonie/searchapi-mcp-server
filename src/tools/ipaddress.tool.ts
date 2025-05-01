@@ -71,7 +71,7 @@ function registerTools(server: McpServer) {
 
 	server.tool(
 		'ip_get_details',
-		`Retrieves geolocation and network details for a public IP address (\`ipAddress\`). If no IP is provided, returns details for the server's current public IP.\n- Fetches country, city, region, coordinates, ISP, and organization.\n- Optional \`includeExtendedData\` can provide reverse DNS, mobile/proxy/hosting detection.\nUse this to get geographical or network context for a public IP address.\nReturns formatted Markdown with location, network details, map link, and timestamp.\n**Note:** Does not work for private/reserved IP addresses. Relies on the external ip-api.com service.`,
+		`Retrieves geolocation and network details for a public IP address (\`ipAddress\`). Falls back to the server's current public IP if omitted. Fetches country, city, coordinates, ISP, etc. Optionally includes extended data (\`includeExtendedData\`) like ASN, mobile/proxy/hosting detection. **Note:** Does not work for private IPs. Relies on ip-api.com. Use \`useHttps\` for paid tier.`,
 		IpAddressToolArgs.shape,
 		getIpAddressDetails,
 	);

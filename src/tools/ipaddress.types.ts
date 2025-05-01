@@ -8,11 +8,13 @@ const IpAddressToolArgs = z.object({
 	includeExtendedData: z
 		.boolean()
 		.optional()
-		.describe('Include extended data like ASN, mobile and proxy detection'),
+		.describe(
+			'Includes extended data like ASN, mobile and proxy detection',
+		),
 	useHttps: z
 		.boolean()
 		.optional()
-		.describe('Use HTTPS for API requests (may require paid API key)'),
+		.describe('Uses HTTPS for API requests (may require paid API key)'),
 });
 
 type IpAddressToolArgsType = z.infer<typeof IpAddressToolArgs>;

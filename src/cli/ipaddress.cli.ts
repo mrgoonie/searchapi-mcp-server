@@ -15,21 +15,21 @@ function register(program: Command) {
 	program
 		.command('get-ip-details')
 		.description(
-			`Get geolocation and network details about an IP address or the current device.`,
+			`Gets geolocation and network details about an IP address or the current device.`,
 		)
 		.argument('[ipAddress]', 'IP address to lookup (omit for current IP)')
 		.option(
-			'--extended',
-			'Include extended data like ASN, mobile and proxy detection',
+			'--include-extended',
+			'Includes extended data like ASN, mobile and proxy detection',
 		)
 		.option(
-			'--https',
-			'Use HTTPS for API requests (may require paid API key)',
+			'--use-https',
+			'Uses HTTPS for API requests (Requires paid API tier)',
 		)
 		.action(
 			async (
 				ipAddress?: string,
-				cmdOptions?: { extended?: boolean; https?: boolean },
+				cmdOptions?: { includeExtended?: boolean; useHttps?: boolean },
 			) => {
 				const commandLogger = Logger.forContext(
 					'cli/ipaddress.cli.ts',
@@ -43,8 +43,9 @@ function register(program: Command) {
 
 					// Map CLI options to controller options
 					const controllerOptions = {
-						includeExtendedData: cmdOptions?.extended || false,
-						useHttps: cmdOptions?.https || false,
+						includeExtendedData:
+							cmdOptions?.includeExtended || false,
+						useHttps: cmdOptions?.useHttps || false,
 					};
 
 					commandLogger.debug(
