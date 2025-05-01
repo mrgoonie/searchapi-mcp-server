@@ -276,9 +276,8 @@ async function handleGetData(args: GetDataArgsType) {
 export function register(server: McpServer) {
 	server.tool(
 		'get_data',
-		`PURPOSE: Get data from the example API.
-     RETURNS: Markdown with formatted data.
-     EXAMPLES: { "param": "value" }`,
+		`Gets data from the example API, optionally using \`param\`.
+Use this to fetch example data. Returns formatted data as Markdown.`,
 		GetDataArgs.shape,
 		handleGetData,
 	);
