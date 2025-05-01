@@ -1,3 +1,11 @@
+## [1.4.3](https://github.com/aashari/boilerplate-mcp-server/compare/v1.4.2...v1.4.3) (2025-05-01)
+
+
+### Bug Fixes
+
+* Align CLI options and descriptions with style guide ([0f5f490](https://github.com/aashari/boilerplate-mcp-server/commit/0f5f4901f69ea80d03688b289b0cd59599957740))
+* align README tool example with concise description style ([b8126a4](https://github.com/aashari/boilerplate-mcp-server/commit/b8126a4b4f8286cfefeb9c50f53aaea7e9f90982))
+
 ## [1.4.2](https://github.com/aashari/boilerplate-mcp-server/compare/v1.4.1...v1.4.2) (2025-05-01)
 
 
