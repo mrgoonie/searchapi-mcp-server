@@ -17,9 +17,10 @@ export default tseslint.config(
 			'prettier/prettier': 'error',
 			indent: ['error', 'tab', { SwitchCase: 1 }],
 			'@typescript-eslint/no-unused-vars': [
-				'error',
+				'warn',
 				{ argsIgnorePattern: '^_' },
 			],
+			'@typescript-eslint/no-explicit-any': 'off',
 		},
 		languageOptions: {
 			parserOptions: {

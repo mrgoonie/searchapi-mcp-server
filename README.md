@@ -6,8 +6,56 @@ This project provides a Model Context Protocol (MCP) server that connects AI ass
 
 - [Website](https://searchapi.site)
 - [API Docs](https://searchapi.site/api-docs)
+- [Swagger UI Config](https://searchapi.site/api-docs/swagger-ui-init.js)
 - Create Search API key [here](https://searchapi.site/profile)
 - [GitHub](https://github.com/mrgoonie/searchapi)
+
+## Todo
+
+- [x] Support "stdio" transport
+- [ ] Support "sse" transport
+
+## How to use
+
+### CLI
+
+```bash
+# Google search via CLI
+npm run dev:cli -- search-google --query "your search query" --api-key "your-api-key"
+
+# Google image search via CLI
+npm run dev:cli -- search-google-images --query "your search query" --api-key "your-api-key"
+
+# YouTube search via CLI
+npm run dev:cli -- search-youtube --query "your search query" --api-key "your-api-key" --max-results 5
+```
+
+### MCP Setup
+
+**For local configuration:**
+```json
+{
+  "mcpServers": {
+    "searchapi": {
+      "command": "node",
+      "args": ["/path/to/searchapi-mcp-server/dist/index.js"],
+      "transportType": "stdio"
+    }
+  }
+}
+```
+
+**For remote configuration:**
+```json
+{
+  "mcpServers": {
+    "searchapi": {
+      "type": "sse",
+      "url": "https://mcp.searchapi.site/sse"
+    }
+  }
+}
+```
 
 ---
 
@@ -46,8 +94,8 @@ This boilerplate implements the MCP specification with a clean, layered architec
 
 ```bash
 # Clone the repository
-git clone https://github.com/aashari/boilerplate-mcp-server.git
-cd boilerplate-mcp-server
+git clone https://github.com/mrgoonie/searchapi-mcp-server.git
+cd searchapi-mcp-server
 
 # Install dependencies
 npm install
@@ -65,6 +113,9 @@ npm run dev:server
 
 This starts the MCP server with hot-reloading and enables the MCP Inspector at http://localhost:5173.
 
+⚙️ Proxy server listening on port 6277
+🔍 MCP Inspector is up and running at http://127.0.0.1:6274
+
 ---
 
 ## Step 3: Test the Example Tool
@@ -73,10 +124,10 @@ Run the example IP lookup tool from the CLI:
 
 ```bash
 # Using CLI in development mode
-npm run dev:cli -- get-ip-details
+npm run dev:cli -- search-google --query "your search query" --api-key "your-api-key"
 
 # Or with a specific IP
-npm run dev:cli -- get-ip-details 8.8.8.8
+npm run dev:cli -- search-google --query "your search query" --api-key "your-api-key" --limit 10 --offset 0 --sort "date:d" --from_date "2023-01-01" --to_date "2023-12-31"
 ```
 
 ---
@@ -91,6 +142,7 @@ This boilerplate follows a clean, layered architecture pattern that separates co
 src/
 ├── cli/              # Command-line interfaces
 ├── controllers/      # Business logic
+├── resources/        # MCP resources: expose data and content from your servers to LLMs
 ├── services/         # External API interactions
 ├── tools/            # MCP tool definitions
 ├── types/            # Type definitions
@@ -380,7 +432,7 @@ When ready to publish your custom MCP server:
 
 ```json
 {
-	"boilerplate": {
+	"searchapi-mcp-server": {
 		"environments": {
 			"DEBUG": "true",
 			"ANY_OTHER_CONFIG": "value"
