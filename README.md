@@ -454,10 +454,10 @@ When ready to publish your custom MCP server:
 
 ```json
 {
-	"searchapi-mcp-server": {
+	"searchapi": {
 		"environments": {
 			"DEBUG": "true",
-			"ANY_OTHER_CONFIG": "value"
+			"SEARCHAPI_API_KEY": "value"
 		}
 	}
 }
