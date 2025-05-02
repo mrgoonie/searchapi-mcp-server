@@ -15,6 +15,11 @@ export interface BaseSearchOptions {
  */
 export interface GoogleSearchOptions extends BaseSearchOptions {
 	query: string;
+	limit?: number;
+	offset?: number;
+	sort?: string;
+	from_date?: string;
+	to_date?: string;
 }
 
 /**
@@ -22,6 +27,11 @@ export interface GoogleSearchOptions extends BaseSearchOptions {
  */
 export interface GoogleImageSearchOptions extends BaseSearchOptions {
 	query: string;
+	limit?: number;
+	offset?: number;
+	sort?: string;
+	from_date?: string;
+	to_date?: string;
 }
 
 /**

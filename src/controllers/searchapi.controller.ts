@@ -50,9 +50,30 @@ async function googleSearch(
 			throw new Error('API key is required for SearchAPI.site');
 		}
 
+		// Define controller defaults
+		const defaults: Partial<GoogleSearchOptions> = {
+			limit: 10,
+			offset: 0,
+			sort: 'date:d',
+		};
+
+		// Apply defaults to provided options
+		const mergedOptions = applyDefaults<GoogleSearchOptions>(
+			options,
+			defaults,
+		);
+		methodLogger.debug('Using options after defaults:', mergedOptions);
+
 		// Call the service with the options
 		const searchResponse = await searchApiService.googleSearch(
-			{ query: options.query },
+			{
+				query: mergedOptions.query,
+				limit: mergedOptions.limit,
+				offset: mergedOptions.offset,
+				sort: mergedOptions.sort,
+				from_date: mergedOptions.from_date,
+				to_date: mergedOptions.to_date,
+			},
 			apiKey,
 		);
 		methodLogger.debug(`Got the response from the service`, searchResponse);
@@ -103,9 +124,30 @@ async function googleImageSearch(
 			throw new Error('API key is required for SearchAPI.site');
 		}
 
+		// Define controller defaults
+		const defaults: Partial<GoogleImageSearchOptions> = {
+			limit: 10,
+			offset: 0,
+			sort: 'date:d',
+		};
+
+		// Apply defaults to provided options
+		const mergedOptions = applyDefaults<GoogleImageSearchOptions>(
+			options,
+			defaults,
+		);
+		methodLogger.debug('Using options after defaults:', mergedOptions);
+
 		// Call the service with the options
 		const searchResponse = await searchApiService.googleImageSearch(
-			{ query: options.query },
+			{
+				query: mergedOptions.query,
+				limit: mergedOptions.limit,
+				offset: mergedOptions.offset,
+				sort: mergedOptions.sort,
+				from_date: mergedOptions.from_date,
+				to_date: mergedOptions.to_date,
+			},
 			apiKey,
 		);
 		methodLogger.debug(`Got the response from the service`, searchResponse);

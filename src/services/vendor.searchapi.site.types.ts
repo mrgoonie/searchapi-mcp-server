@@ -95,6 +95,11 @@ export interface YouTubeSearchResponse extends SearchApiBaseResponse {
  */
 export interface GoogleSearchRequestOptions {
 	query: string;
+	limit?: number;
+	offset?: number;
+	sort?: string;
+	from_date?: string;
+	to_date?: string;
 }
 
 /**
@@ -102,6 +107,11 @@ export interface GoogleSearchRequestOptions {
  */
 export interface GoogleImageSearchRequestOptions {
 	query: string;
+	limit?: number;
+	offset?: number;
+	sort?: string;
+	from_date?: string;
+	to_date?: string;
 }
 
 /**

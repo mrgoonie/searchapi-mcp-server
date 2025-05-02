@@ -18,6 +18,23 @@ function register(program: Command) {
 		.description('Perform a Google search using SearchAPI.site')
 		.requiredOption('--query <query>', 'The search query to perform')
 		.option('--api-key <apiKey>', 'Your SearchAPI.site API key')
+		.option(
+			'--limit <limit>',
+			'Maximum number of results to return (1-100)',
+			(value) => parseInt(value, 10),
+		)
+		.option('--offset <offset>', 'Offset for pagination', (value) =>
+			parseInt(value, 10),
+		)
+		.option('--sort <sort>', 'Sort order (e.g., "date:d" for newest first)')
+		.option(
+			'--from-date <fromDate>',
+			'Start date for filtering results (format: YYYY-MM-DD)',
+		)
+		.option(
+			'--to-date <toDate>',
+			'End date for filtering results (format: YYYY-MM-DD)',
+		)
 		.action(async (options) => {
 			const commandLogger = Logger.forContext(
 				'cli/searchapi.cli.ts',
@@ -32,6 +49,11 @@ function register(program: Command) {
 				const result = await searchApiController.default.googleSearch({
 					query: options.query,
 					apiKey,
+					limit: options.limit,
+					offset: options.offset,
+					sort: options.sort,
+					from_date: options.fromDate,
+					to_date: options.toDate,
 				});
 
 				console.log(result.content);
@@ -46,6 +68,23 @@ function register(program: Command) {
 		.description('Perform a Google image search using SearchAPI.site')
 		.requiredOption('--query <query>', 'The image search query to perform')
 		.option('--api-key <apiKey>', 'Your SearchAPI.site API key')
+		.option(
+			'--limit <limit>',
+			'Maximum number of results to return (1-100)',
+			(value) => parseInt(value, 10),
+		)
+		.option('--offset <offset>', 'Offset for pagination', (value) =>
+			parseInt(value, 10),
+		)
+		.option('--sort <sort>', 'Sort order (e.g., "date:d" for newest first)')
+		.option(
+			'--from-date <fromDate>',
+			'Start date for filtering results (format: YYYY-MM-DD)',
+		)
+		.option(
+			'--to-date <toDate>',
+			'End date for filtering results (format: YYYY-MM-DD)',
+		)
 		.action(async (options) => {
 			const commandLogger = Logger.forContext(
 				'cli/searchapi.cli.ts',
@@ -61,6 +100,11 @@ function register(program: Command) {
 					await searchApiController.default.googleImageSearch({
 						query: options.query,
 						apiKey,
+						limit: options.limit,
+						offset: options.offset,
+						sort: options.sort,
+						from_date: options.fromDate,
+						to_date: options.toDate,
 					});
 
 				console.log(result.content);

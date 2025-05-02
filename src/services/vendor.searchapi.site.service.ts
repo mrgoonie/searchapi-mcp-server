@@ -110,9 +110,34 @@ async function googleSearch(
 	);
 	methodLogger.debug(`Performing Google search for query: ${options.query}`);
 
+	const requestBody: Record<string, any> = {
+		query: options.query,
+	};
+
+	// Add optional parameters if provided
+	if (options.limit !== undefined) {
+		requestBody.limit = options.limit;
+	}
+
+	if (options.offset !== undefined) {
+		requestBody.offset = options.offset;
+	}
+
+	if (options.sort) {
+		requestBody.sort = options.sort;
+	}
+
+	if (options.from_date) {
+		requestBody.from_date = options.from_date;
+	}
+
+	if (options.to_date) {
+		requestBody.to_date = options.to_date;
+	}
+
 	return makeRequest<GoogleSearchResponse>(
 		'/api/v1/google',
-		{ query: options.query },
+		requestBody,
 		apiKey,
 	);
 }
@@ -135,9 +160,34 @@ async function googleImageSearch(
 		`Performing Google image search for query: ${options.query}`,
 	);
 
+	const requestBody: Record<string, any> = {
+		query: options.query,
+	};
+
+	// Add optional parameters if provided
+	if (options.limit !== undefined) {
+		requestBody.limit = options.limit;
+	}
+
+	if (options.offset !== undefined) {
+		requestBody.offset = options.offset;
+	}
+
+	if (options.sort) {
+		requestBody.sort = options.sort;
+	}
+
+	if (options.from_date) {
+		requestBody.from_date = options.from_date;
+	}
+
+	if (options.to_date) {
+		requestBody.to_date = options.to_date;
+	}
+
 	return makeRequest<GoogleImageSearchResponse>(
 		'/api/v1/google/images',
-		{ query: options.query },
+		requestBody,
 		apiKey,
 	);
 }

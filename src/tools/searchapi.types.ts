@@ -11,6 +11,25 @@ import { z } from 'zod';
 export const GoogleSearchToolArgs = z.object({
 	query: z.string().describe('The search query to perform'),
 	apiKey: z.string().optional().describe('Your SearchAPI.site API key'),
+	limit: z
+		.number()
+		.min(1)
+		.max(100)
+		.optional()
+		.describe('Maximum number of results to return (1-100)'),
+	offset: z.number().min(0).optional().describe('Offset for pagination'),
+	sort: z
+		.string()
+		.optional()
+		.describe('Sort order (e.g., "date:d" for newest first)'),
+	from_date: z
+		.string()
+		.optional()
+		.describe('Start date for filtering results (format: YYYY-MM-DD)'),
+	to_date: z
+		.string()
+		.optional()
+		.describe('End date for filtering results (format: YYYY-MM-DD)'),
 });
 
 /**
@@ -24,6 +43,25 @@ export type GoogleSearchToolArgsType = z.infer<typeof GoogleSearchToolArgs>;
 export const GoogleImageSearchToolArgs = z.object({
 	query: z.string().describe('The image search query to perform'),
 	apiKey: z.string().optional().describe('Your SearchAPI.site API key'),
+	limit: z
+		.number()
+		.min(1)
+		.max(100)
+		.optional()
+		.describe('Maximum number of results to return (1-100)'),
+	offset: z.number().min(0).optional().describe('Offset for pagination'),
+	sort: z
+		.string()
+		.optional()
+		.describe('Sort order (e.g., "date:d" for newest first)'),
+	from_date: z
+		.string()
+		.optional()
+		.describe('Start date for filtering results (format: YYYY-MM-DD)'),
+	to_date: z
+		.string()
+		.optional()
+		.describe('End date for filtering results (format: YYYY-MM-DD)'),
 });
 
 /**

@@ -23,6 +23,8 @@ RUN npm run build
 RUN chmod +x dist/index.js
 
 EXPOSE 3000
+EXPOSE 6277
+EXPOSE 6274
 
 # Start the MCP server
-CMD [ "npm", "start" ]
+CMD [ "npm", "start:server" ]

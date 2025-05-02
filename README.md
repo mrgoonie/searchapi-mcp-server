@@ -108,6 +108,9 @@ npm run dev:server
 
 This starts the MCP server with hot-reloading and enables the MCP Inspector at http://localhost:5173.
 
+⚙️ Proxy server listening on port 6277
+🔍 MCP Inspector is up and running at http://127.0.0.1:6274
+
 ---
 
 ## Step 3: Test the Example Tool
@@ -116,10 +119,10 @@ Run the example IP lookup tool from the CLI:
 
 ```bash
 # Using CLI in development mode
-npm run dev:cli -- get-ip-details
+npm run dev:cli -- search-google --query "your search query" --api-key "your-api-key"
 
 # Or with a specific IP
-npm run dev:cli -- get-ip-details 8.8.8.8
+npm run dev:cli -- search-google --query "your search query" --api-key "your-api-key" --limit 10 --offset 0 --sort "date:d" --from_date "2023-01-01" --to_date "2023-12-31"
 ```
 
 ---
