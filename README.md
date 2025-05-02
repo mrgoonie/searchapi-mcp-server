@@ -1,10 +1,14 @@
-# Boilerplate MCP Server
+# SearchAPI.site - MCP Server
 
-This project serves as a foundation for developing custom Model Context Protocol (MCP) servers that connect AI assistants to external data sources or APIs. It provides a complete architecture pattern, a working example tool, and development infrastructure ready for extension.
+This project provides a Model Context Protocol (MCP) server that connects AI assistants to external data sources (Google, Bing, etc.) via SearchAPI.site. 
+
+## SearchAPI.site API Docs
+
+- [SearchAPI.site API Docs](https://searchapi.site/api-docs)
 
 ---
 
-# Overview
+# Source Code Overview
 
 ## What is MCP?
 
