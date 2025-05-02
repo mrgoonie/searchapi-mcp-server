@@ -6,6 +6,7 @@ This project provides a Model Context Protocol (MCP) server that connects AI ass
 
 - [Website](https://searchapi.site)
 - [API Docs](https://searchapi.site/api-docs)
+- [Swagger UI Config](https://searchapi.site/api-docs/swagger-ui-init.js)
 - Create Search API key [here](https://searchapi.site/profile)
 - [GitHub](https://github.com/mrgoonie/searchapi)
 
@@ -91,6 +92,7 @@ This boilerplate follows a clean, layered architecture pattern that separates co
 src/
 ├── cli/              # Command-line interfaces
 ├── controllers/      # Business logic
+├── resources/        # MCP resources: expose data and content from your servers to LLMs
 ├── services/         # External API interactions
 ├── tools/            # MCP tool definitions
 ├── types/            # Type definitions
