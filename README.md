@@ -2,6 +2,8 @@
 
 This project provides a Model Context Protocol (MCP) server that connects AI assistants to external data sources (Google, Bing, etc.) via [SearchAPI.site](https://searchapi.site). 
 
+- [NPM](https://www.npmjs.com/package/searchapi-mcp-server)
+
 ## SearchAPI.site
 
 - [Website](https://searchapi.site)
