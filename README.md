@@ -4,6 +4,20 @@ This project provides a Model Context Protocol (MCP) server that connects AI ass
 
 - [NPM](https://www.npmjs.com/package/searchapi-mcp-server)
 
+### Available platforms
+- [x] Google - Web Search
+- [x] Google - Image Search
+- [x] Google - YouTube Search
+- [ ] Google - Maps Search
+- [x] Bing - Web Search
+- [ ] Bing - Image Search
+- [ ] Reddit
+- [ ] X/Twitter
+- [ ] Facebook Search
+- [ ] Facebook Group Search
+- [ ] Instagram
+- [ ] TikTok
+
 ## SearchAPI.site
 
 - [Website](https://searchapi.site)
