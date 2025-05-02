@@ -67,7 +67,7 @@ npm run dev:cli -- search-youtube --query "your search query" --api-key "your-ap
 }
 ```
 
-**For remote configuration:**
+**For remote configuration: (IN PROGRESS)**
 ```json
 {
   "mcpServers": {
