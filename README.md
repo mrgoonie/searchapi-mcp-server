@@ -2,6 +2,10 @@
 
 This project provides a Model Context Protocol (MCP) server that connects AI assistants to external data sources (Google, Bing, etc.) via [SearchAPI.site](https://searchapi.site). 
 
+<a href="https://glama.ai/mcp/servers/@mrgoonie/searchapi-mcp-server">
+  <img width="380" height="200" src="https://glama.ai/mcp/servers/@mrgoonie/searchapi-mcp-server/badge" alt="SearchAPI Server MCP server" />
+</a>
+
 ## SearchAPI.site
 
 - [Website](https://searchapi.site)
