@@ -10,6 +10,11 @@ This project provides a Model Context Protocol (MCP) server that connects AI ass
 - Create Search API key [here](https://searchapi.site/profile)
 - [GitHub](https://github.com/mrgoonie/searchapi)
 
+## Todo
+
+- [x] Support "stdio" transport
+- [ ] Support "sse" transport
+
 ## How to use
 
 ### CLI
