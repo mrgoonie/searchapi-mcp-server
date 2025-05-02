@@ -10,6 +10,25 @@ This project provides a Model Context Protocol (MCP) server that connects AI ass
 - Create Search API key [here](https://searchapi.site/profile)
 - [GitHub](https://github.com/mrgoonie/searchapi)
 
+## How to use
+
+### CLI
+
+```bash
+# Google search via CLI
+npm run dev:cli -- search-google --query "your search query" --api-key "your-api-key"
+
+# Google image search via CLI
+npm run dev:cli -- search-google-images --query "your search query" --api-key "your-api-key"
+
+# YouTube search via CLI
+npm run dev:cli -- search-youtube --query "your search query" --api-key "your-api-key" --max-results 5
+```
+
+### MCP Server
+
+
+
 ---
 
 # Source Code Overview
@@ -47,8 +66,8 @@ This boilerplate implements the MCP specification with a clean, layered architec
 
 ```bash
 # Clone the repository
-git clone https://github.com/aashari/boilerplate-mcp-server.git
-cd boilerplate-mcp-server
+git clone https://github.com/mrgoonie/searchapi-mcp-server.git
+cd searchapi-mcp-server
 
 # Install dependencies
 npm install
@@ -382,7 +401,7 @@ When ready to publish your custom MCP server:
 
 ```json
 {
-	"boilerplate": {
+	"searchapi-mcp-server": {
 		"environments": {
 			"DEBUG": "true",
 			"ANY_OTHER_CONFIG": "value"

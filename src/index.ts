@@ -11,6 +11,7 @@ import { runCli } from './cli/index.js';
 // Import tools and resources
 import ipAddressTools from './tools/ipaddress.tool.js';
 import ipLookupResources from './resources/ipaddress.resource.js';
+import searchApiTools from './tools/searchapi.tool.js';
 
 /**
  * Boilerplate MCP Server
@@ -72,6 +73,9 @@ export async function startServer(mode: 'stdio' | 'sse' = 'stdio') {
 
 	ipAddressTools.registerTools(serverInstance);
 	serverLogger.debug('Registered IP address tools');
+
+	searchApiTools.register(serverInstance);
+	serverLogger.debug('Registered SearchAPI.site tools');
 
 	ipLookupResources.registerResources(serverInstance);
 	serverLogger.debug('Registered IP lookup resources');
