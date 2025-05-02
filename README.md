@@ -1,10 +1,13 @@
 # SearchAPI.site - MCP Server
 
-This project provides a Model Context Protocol (MCP) server that connects AI assistants to external data sources (Google, Bing, etc.) via SearchAPI.site. 
+This project provides a Model Context Protocol (MCP) server that connects AI assistants to external data sources (Google, Bing, etc.) via [SearchAPI.site](https://searchapi.site). 
 
-## SearchAPI.site API Docs
+## SearchAPI.site
 
-- [SearchAPI.site API Docs](https://searchapi.site/api-docs)
+- [Website](https://searchapi.site)
+- [API Docs](https://searchapi.site/api-docs)
+- Create Search API key [here](https://searchapi.site/profile)
+- [GitHub](https://github.com/mrgoonie/searchapi)
 
 ---
 
