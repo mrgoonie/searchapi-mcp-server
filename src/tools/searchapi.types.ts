@@ -10,7 +10,7 @@ import { z } from 'zod';
  */
 export const GoogleSearchToolArgs = z.object({
 	query: z.string().describe('The search query to perform'),
-	apiKey: z.string().describe('Your SearchAPI.site API key'),
+	apiKey: z.string().optional().describe('Your SearchAPI.site API key'),
 });
 
 /**
@@ -23,7 +23,7 @@ export type GoogleSearchToolArgsType = z.infer<typeof GoogleSearchToolArgs>;
  */
 export const GoogleImageSearchToolArgs = z.object({
 	query: z.string().describe('The image search query to perform'),
-	apiKey: z.string().describe('Your SearchAPI.site API key'),
+	apiKey: z.string().optional().describe('Your SearchAPI.site API key'),
 });
 
 /**
@@ -38,7 +38,7 @@ export type GoogleImageSearchToolArgsType = z.infer<
  */
 export const YouTubeSearchToolArgs = z.object({
 	query: z.string().describe('The YouTube search query to perform'),
-	apiKey: z.string().describe('Your SearchAPI.site API key'),
+	apiKey: z.string().optional().describe('Your SearchAPI.site API key'),
 	maxResults: z
 		.number()
 		.min(1)

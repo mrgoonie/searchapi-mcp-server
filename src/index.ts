@@ -9,8 +9,8 @@ import { VERSION, PACKAGE_NAME } from './utils/constants.util.js';
 import { runCli } from './cli/index.js';
 
 // Import tools and resources
-import ipAddressTools from './tools/ipaddress.tool.js';
-import ipLookupResources from './resources/ipaddress.resource.js';
+// import ipAddressTools from './tools/ipaddress.tool.js';
+// import ipLookupResources from './resources/ipaddress.resource.js';
 import searchApiTools from './tools/searchapi.tool.js';
 
 /**
@@ -71,14 +71,14 @@ export async function startServer(mode: 'stdio' | 'sse' = 'stdio') {
 	// Register tools and resources
 	serverLogger.info('Registering MCP tools and resources...');
 
-	ipAddressTools.registerTools(serverInstance);
-	serverLogger.debug('Registered IP address tools');
+	// ipAddressTools.registerTools(serverInstance);
+	// serverLogger.debug('Registered IP address tools');
 
 	searchApiTools.register(serverInstance);
 	serverLogger.debug('Registered SearchAPI.site tools');
 
-	ipLookupResources.registerResources(serverInstance);
-	serverLogger.debug('Registered IP lookup resources');
+	// ipLookupResources.registerResources(serverInstance);
+	// serverLogger.debug('Registered IP lookup resources');
 
 	serverLogger.info('All tools and resources registered successfully');
 

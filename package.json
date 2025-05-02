@@ -1,6 +1,6 @@
 {
 	"name": "searchapi-mcp-server",
-	"version": "1.4.4",
+	"version": "1.0.0",
 	"description": "TypeScript Model Context Protocol (MCP) server boilerplate providing search API tools/resources. Includes CLI support and extensible structure for connecting AI systems (LLMs) to external data sources (Google, Bing, etc.) via SearchAPI.site",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",

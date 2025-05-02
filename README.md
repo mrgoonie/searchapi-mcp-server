@@ -25,9 +25,32 @@ npm run dev:cli -- search-google-images --query "your search query" --api-key "y
 npm run dev:cli -- search-youtube --query "your search query" --api-key "your-api-key" --max-results 5
 ```
 
-### MCP Server
+### MCP Setup
 
+**For local configuration:**
+```json
+{
+  "mcpServers": {
+    "searchapi": {
+      "command": "node",
+      "args": ["/path/to/searchapi-mcp-server/dist/index.js"],
+      "transportType": "stdio"
+    }
+  }
+}
+```
 
+**For remote configuration:**
+```json
+{
+  "mcpServers": {
+    "searchapi": {
+      "type": "sse",
+      "url": "https://mcp.searchapi.site/sse"
+    }
+  }
+}
+```
 
 ---
 

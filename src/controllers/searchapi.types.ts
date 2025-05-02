@@ -7,7 +7,7 @@
  * Base options for all search requests
  */
 export interface BaseSearchOptions {
-	apiKey: string;
+	apiKey?: string;
 }
 
 /**

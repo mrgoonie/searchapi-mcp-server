@@ -13,6 +13,7 @@ import {
 	GoogleImageSearchOptions,
 	YouTubeSearchOptions,
 } from './searchapi.types.js';
+import { config } from '../utils/config.util.js';
 
 /**
  * @namespace SearchApiController
@@ -44,14 +45,15 @@ async function googleSearch(
 			throw new Error('Query is required for Google search');
 		}
 
-		if (!options.apiKey) {
+		const apiKey = options.apiKey || config.get('SEARCHAPI_API_KEY');
+		if (!apiKey) {
 			throw new Error('API key is required for SearchAPI.site');
 		}
 
 		// Call the service with the options
 		const searchResponse = await searchApiService.googleSearch(
 			{ query: options.query },
-			options.apiKey,
+			apiKey,
 		);
 		methodLogger.debug(`Got the response from the service`, searchResponse);
 
@@ -96,14 +98,15 @@ async function googleImageSearch(
 			throw new Error('Query is required for Google image search');
 		}
 
-		if (!options.apiKey) {
+		const apiKey = options.apiKey || config.get('SEARCHAPI_API_KEY');
+		if (!apiKey) {
 			throw new Error('API key is required for SearchAPI.site');
 		}
 
 		// Call the service with the options
 		const searchResponse = await searchApiService.googleImageSearch(
 			{ query: options.query },
-			options.apiKey,
+			apiKey,
 		);
 		methodLogger.debug(`Got the response from the service`, searchResponse);
 
@@ -146,7 +149,8 @@ async function youtubeSearch(
 			throw new Error('Query is required for YouTube search');
 		}
 
-		if (!options.apiKey) {
+		const apiKey = options.apiKey || config.get('SEARCHAPI_API_KEY');
+		if (!apiKey) {
 			throw new Error('API key is required for SearchAPI.site');
 		}
 
@@ -174,7 +178,7 @@ async function youtubeSearch(
 				publishedAfter: mergedOptions.publishedAfter,
 				videoDuration: mergedOptions.videoDuration,
 			},
-			mergedOptions.apiKey,
+			apiKey,
 		);
 		methodLogger.debug(`Got the response from the service`, searchResponse);
 

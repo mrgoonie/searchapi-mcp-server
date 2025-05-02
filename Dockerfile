@@ -13,6 +13,9 @@ RUN npm install --ignore-scripts
 # Copy source code
 COPY . .
 
+# Copy env file
+COPY .env.prod .env
+
 # Build the TypeScript code
 RUN npm run build
 

@@ -55,6 +55,30 @@ export function getIpApiCredentials(): IpApiCredentials {
 }
 
 /**
+ * Retrieves SearchAPI.site credentials from configuration.
+ * Specifically checks for SEARCHAPI_API_KEY.
+ * @returns IpApiCredentials object containing the API token if found.
+ */
+export function getSearchApiCredentials(): IpApiCredentials {
+	const methodLogger = Logger.forContext(
+		'utils/transport.util.ts',
+		'getSearchApiCredentials',
+	);
+
+	const apiToken = config.get('SEARCHAPI_API_KEY');
+
+	if (!apiToken) {
+		methodLogger.debug(
+			'No SearchAPI.site API key found (SEARCHAPI_API_KEY).',
+		);
+		return {}; // Return empty object if no token
+	} else {
+		methodLogger.debug('Using SearchAPI.site API key from configuration.');
+		return { apiToken };
+	}
+}
+
+/**
  * Fetches data specifically from the ip-api.com endpoint.
  * Handles URL construction, authentication (if token provided), and query parameters.
  * Relies on the generic fetchApi function for the actual HTTP request.

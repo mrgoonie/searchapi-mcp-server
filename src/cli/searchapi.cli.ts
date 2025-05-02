@@ -2,6 +2,7 @@ import { Command } from 'commander';
 import { Logger } from '../utils/logger.util.js';
 import * as searchApiController from '../controllers/searchapi.controller.js';
 import { handleCliError } from '../utils/error.util.js';
+import { config } from '../utils/config.util.js';
 
 /**
  * Register SearchAPI.site CLI commands
@@ -16,7 +17,7 @@ function register(program: Command) {
 		.command('search-google')
 		.description('Perform a Google search using SearchAPI.site')
 		.requiredOption('--query <query>', 'The search query to perform')
-		.requiredOption('--api-key <apiKey>', 'Your SearchAPI.site API key')
+		.option('--api-key <apiKey>', 'Your SearchAPI.site API key')
 		.action(async (options) => {
 			const commandLogger = Logger.forContext(
 				'cli/searchapi.cli.ts',
@@ -25,9 +26,12 @@ function register(program: Command) {
 			try {
 				commandLogger.debug('CLI search-google called', options);
 
+				const apiKey =
+					options.apiKey || config.get('SEARCHAPI_API_KEY');
+
 				const result = await searchApiController.default.googleSearch({
 					query: options.query,
-					apiKey: options.apiKey,
+					apiKey,
 				});
 
 				console.log(result.content);
@@ -41,7 +45,7 @@ function register(program: Command) {
 		.command('search-google-images')
 		.description('Perform a Google image search using SearchAPI.site')
 		.requiredOption('--query <query>', 'The image search query to perform')
-		.requiredOption('--api-key <apiKey>', 'Your SearchAPI.site API key')
+		.option('--api-key <apiKey>', 'Your SearchAPI.site API key')
 		.action(async (options) => {
 			const commandLogger = Logger.forContext(
 				'cli/searchapi.cli.ts',
@@ -50,10 +54,13 @@ function register(program: Command) {
 			try {
 				commandLogger.debug('CLI search-google-images called', options);
 
+				const apiKey =
+					options.apiKey || config.get('SEARCHAPI_API_KEY');
+
 				const result =
 					await searchApiController.default.googleImageSearch({
 						query: options.query,
-						apiKey: options.apiKey,
+						apiKey,
 					});
 
 				console.log(result.content);
@@ -70,7 +77,7 @@ function register(program: Command) {
 			'--query <query>',
 			'The YouTube search query to perform',
 		)
-		.requiredOption('--api-key <apiKey>', 'Your SearchAPI.site API key')
+		.option('--api-key <apiKey>', 'Your SearchAPI.site API key')
 		.option(
 			'--max-results <maxResults>',
 			'Maximum number of results to return (1-50)',
@@ -103,9 +110,12 @@ function register(program: Command) {
 			try {
 				commandLogger.debug('CLI search-youtube called', options);
 
+				const apiKey =
+					options.apiKey || config.get('SEARCHAPI_API_KEY');
+
 				const result = await searchApiController.default.youtubeSearch({
 					query: options.query,
-					apiKey: options.apiKey,
+					apiKey,
 					maxResults: options.maxResults,
 					pageToken: options.pageToken,
 					order: options.order,
