@@ -167,6 +167,32 @@ class ConfigLoader {
 		}
 		return value.toLowerCase() === 'true';
 	}
+
+	/**
+	 * Get a string configuration value
+	 * @param key The configuration key
+	 * @param defaultValue The default value if the key is not found
+	 * @returns The string configuration value or the default value
+	 */
+	getString(key: string, defaultValue: string = ''): string {
+		const value = this.get(key);
+		return value !== undefined ? value : defaultValue;
+	}
+
+	/**
+	 * Get a number configuration value
+	 * @param key The configuration key
+	 * @param defaultValue The default value if the key is not found
+	 * @returns The number configuration value or the default value
+	 */
+	getNumber(key: string, defaultValue: number = 0): number {
+		const value = this.get(key);
+		if (value === undefined) {
+			return defaultValue;
+		}
+		const parsed = Number(value);
+		return isNaN(parsed) ? defaultValue : parsed;
+	}
 }
 
 // Create and export a singleton instance with the package name from package.json
