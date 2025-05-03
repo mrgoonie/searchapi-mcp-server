@@ -68,26 +68,13 @@ npm run dev:cli -- search-youtube --query "your search query" --api-key "your-ap
 }
 ```
 
-**For local configuration with Streamable HTTP transport:**
-```json
-{
-  "mcpServers": {
-    "searchapi": {
-      "command": "node",
-      "args": ["/path/to/searchapi-mcp-server/dist/index.js", "--transport", "http"],
-      "transportType": "stdio"
-    }
-  }
-}
-```
-
 **For remote HTTP configuration:**
 ```json
 {
   "mcpServers": {
     "searchapi": {
       "type": "http",
-      "url": "http://localhost:8080/mcp"
+      "url": "http://mcp.searchapi.site/mcp"
     }
   }
 }
