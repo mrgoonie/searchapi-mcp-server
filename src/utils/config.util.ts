@@ -91,7 +91,7 @@ class ConfigLoader {
 			const config = JSON.parse(configContent);
 
 			// Determine the potential keys for the current package
-			const shortKey = 'boilerplate'; // Project-specific short key
+			const shortKey = 'searchapi'; // Project-specific short key
 			const fullPackageName = this.packageName; // e.g., '@aashari/boilerplate-mcp-server'
 			const unscopedPackageName =
 				fullPackageName.split('/')[1] || fullPackageName; // e.g., 'boilerplate-mcp-server'
@@ -167,7 +167,33 @@ class ConfigLoader {
 		}
 		return value.toLowerCase() === 'true';
 	}
+
+	/**
+	 * Get a string configuration value
+	 * @param key The configuration key
+	 * @param defaultValue The default value if the key is not found
+	 * @returns The string configuration value or the default value
+	 */
+	getString(key: string, defaultValue: string = ''): string {
+		const value = this.get(key);
+		return value !== undefined ? value : defaultValue;
+	}
+
+	/**
+	 * Get a number configuration value
+	 * @param key The configuration key
+	 * @param defaultValue The default value if the key is not found
+	 * @returns The number configuration value or the default value
+	 */
+	getNumber(key: string, defaultValue: number = 0): number {
+		const value = this.get(key);
+		if (value === undefined) {
+			return defaultValue;
+		}
+		const parsed = Number(value);
+		return isNaN(parsed) ? defaultValue : parsed;
+	}
 }
 
 // Create and export a singleton instance with the package name from package.json
-export const config = new ConfigLoader('@aashari/boilerplate-mcp-server');
+export const config = new ConfigLoader('searchapi-mcp-server');
