@@ -32,10 +32,11 @@ This project provides a Model Context Protocol (MCP) server that connects AI ass
 - Create Search API key [here](https://searchapi.site/profile)
 - [GitHub](https://github.com/mrgoonie/searchapi)
 
-## Todo
+## Supported Transports
 
-- [x] Support "stdio" transport
-- [ ] Support "sse" transport
+- [x] ["stdio"](https://modelcontextprotocol.io/specification/2025-03-26/basic/transports#stdio) transport - Default transport for CLI usage
+- [x] ["Streamable HTTP"](https://modelcontextprotocol.io/specification/2025-03-26/basic/transports#streamable-http) transport - For web-based clients
+- [ ] ~~"sse" transport~~ **[(Deprecated)](https://modelcontextprotocol.io/specification/2025-03-26/basic/transports#backwards-compatibility)**
 
 ## How to use
 
@@ -54,7 +55,7 @@ npm run dev:cli -- search-youtube --query "your search query" --api-key "your-ap
 
 ### MCP Setup
 
-**For local configuration:**
+**For local configuration with stdio transport:**
 ```json
 {
   "mcpServers": {
@@ -67,17 +68,38 @@ npm run dev:cli -- search-youtube --query "your search query" --api-key "your-ap
 }
 ```
 
-**For remote configuration: (IN PROGRESS)**
+**For local configuration with Streamable HTTP transport:**
 ```json
 {
   "mcpServers": {
     "searchapi": {
-      "type": "sse",
-      "url": "https://mcp.searchapi.site/sse"
+      "command": "node",
+      "args": ["/path/to/searchapi-mcp-server/dist/index.js", "--transport", "http"],
+      "transportType": "stdio"
     }
   }
 }
 ```
+
+**For remote HTTP configuration:**
+```json
+{
+  "mcpServers": {
+    "searchapi": {
+      "type": "http",
+      "url": "http://localhost:8080/mcp"
+    }
+  }
+}
+```
+
+**Environment Variables for HTTP Transport:**
+
+You can configure the HTTP server using these environment variables:
+
+- `MCP_HTTP_HOST`: The host to bind to (default: `127.0.0.1`)
+- `MCP_HTTP_PORT`: The port to listen on (default: `8080`)
+- `MCP_HTTP_PATH`: The endpoint path (default: `/mcp`)
 
 ---
 
@@ -127,16 +149,24 @@ npm install
 
 ## Step 2: Run Development Server
 
-Start the server in development mode:
+Start the server in development mode with stdio transport (default):
 
 ```bash
 npm run dev:server
+```
+
+Or with the Streamable HTTP transport:
+
+```bash
+npm run dev:server:http
 ```
 
 This starts the MCP server with hot-reloading and enables the MCP Inspector at http://localhost:5173.
 
 ⚙️ Proxy server listening on port 6277
 🔍 MCP Inspector is up and running at http://127.0.0.1:6274
+
+When using HTTP transport, the server will be available at http://127.0.0.1:8080/mcp by default.
 
 ---
 

@@ -25,13 +25,17 @@
 		"update:check": "npx npm-check-updates",
 		"update:deps": "npx npm-check-updates -u && npm install --legacy-peer-deps",
 		"update:version": "node scripts/update-version.js",
-		"dev:server": "DEBUG=true npm run build && npx @modelcontextprotocol/inspector -e DEBUG=true node dist/index.js",
+		"dev:server": "DEBUG=true npm run build && node dist/index.js",
+		"dev:server:http": "DEBUG=true npm run build && node dist/index.js --transport http",
+		"dev:inspector": "npx @modelcontextprotocol/inspector",
 		"dev:cli": "DEBUG=true npm run build && DEBUG=true node dist/index.js",
 		"start:server": "npm run build && npx @modelcontextprotocol/inspector node dist/index.js",
+		"start:server:http": "npm run build && npx @modelcontextprotocol/inspector node dist/index.js --transport http",
 		"start:cli": "npm run build && node dist/index.js"
 	},
 	"keywords": [
 		"mcp",
+		"model context protocol",
 		"typescript",
 		"claude",
 		"anthropic",
@@ -59,6 +63,9 @@
 		"@semantic-release/git": "^10.0.1",
 		"@semantic-release/github": "^11.0.2",
 		"@semantic-release/npm": "^12.0.1",
+		"@types/content-type": "^1.1.8",
+		"@types/cors": "^2.8.17",
+		"@types/express": "^5.0.1",
 		"@types/jest": "^29.5.14",
 		"@types/node": "^22.15.3",
 		"@typescript-eslint/eslint-plugin": "^8.31.1",
@@ -83,7 +90,10 @@
 	"dependencies": {
 		"@modelcontextprotocol/sdk": "^1.11.0",
 		"commander": "^13.1.0",
+		"content-type": "^1.0.5",
+		"cors": "^2.8.5",
 		"dotenv": "^16.5.0",
+		"express": "^5.1.0",
 		"zod": "^3.24.3"
 	},
 	"directories": {
