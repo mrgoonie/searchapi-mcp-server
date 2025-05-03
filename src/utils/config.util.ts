@@ -91,7 +91,7 @@ class ConfigLoader {
 			const config = JSON.parse(configContent);
 
 			// Determine the potential keys for the current package
-			const shortKey = 'boilerplate'; // Project-specific short key
+			const shortKey = 'searchapi'; // Project-specific short key
 			const fullPackageName = this.packageName; // e.g., '@aashari/boilerplate-mcp-server'
 			const unscopedPackageName =
 				fullPackageName.split('/')[1] || fullPackageName; // e.g., 'boilerplate-mcp-server'
@@ -170,4 +170,4 @@ class ConfigLoader {
 }
 
 // Create and export a singleton instance with the package name from package.json
-export const config = new ConfigLoader('@aashari/boilerplate-mcp-server');
+export const config = new ConfigLoader('searchapi-mcp-server');

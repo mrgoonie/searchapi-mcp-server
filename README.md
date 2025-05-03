@@ -463,4 +463,4 @@ When ready to publish your custom MCP server:
 }
 ```
 
-**Note:** For backward compatibility, the server will also recognize configurations under the full package name (`@aashari/boilerplate-mcp-server`) or the unscoped package name (`boilerplate-mcp-server`) if the `boilerplate` key is not found. However, using the short `boilerplate` key is recommended for new configurations.
+**Note:** For backward compatibility, the server will also recognize configurations under the full package name (`searchapi-mcp-server`) or the unscoped package name (`searchapi-mcp-server`) if the `searchapi` key is not found. However, using the short `searchapi` key is recommended for new configurations.
