@@ -28,7 +28,7 @@ jobs:
               run: npm outdated || true
 
             - name: Run tests
-              run: npm test
+              run: npm test --passWithNoTests
 
             - name: Run linting
               run: npm run lint

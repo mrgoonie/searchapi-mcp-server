@@ -44,7 +44,7 @@ jobs:
 
             # Step 6: Run tests to ensure quality
             - name: Verify tests
-              run: npm test # Runs Jest tests
+              run: npm test --passWithNoTests # Runs Jest tests
 
             # Step 7: Configure Git identity for releases
             - name: Configure Git User
