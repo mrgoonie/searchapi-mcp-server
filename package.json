@@ -27,12 +27,12 @@
 		"update:version": "node scripts/update-version.js",
 		"dev:server": "DEBUG=true npm run build && node dist/index.js",
 		"dev:server:http": "DEBUG=true npm run build && node dist/index.js --transport http",
-		"dev:inspector": "npx @modelcontextprotocol/inspector",
 		"dev:cli": "DEBUG=true npm run build && DEBUG=true node dist/index.js",
 		"start:server": "npm run build && npx @modelcontextprotocol/inspector node dist/index.js",
 		"start:server:http": "node dist/index.js --transport http",
 		"start:inspector": "npx @modelcontextprotocol/inspector",
-		"start:cli": "npm run build && node dist/index.js"
+		"start:cli": "npm run build && node dist/index.js",
+		"inspector": "npx @modelcontextprotocol/inspector"
 	},
 	"keywords": [
 		"mcp",
