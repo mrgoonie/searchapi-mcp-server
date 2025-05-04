@@ -95,7 +95,7 @@ export async function startServer(mode: 'stdio' | 'http' = 'stdio') {
 		}
 	} else if (mode === 'http') {
 		// Configure HTTP transport with Express
-		const host = config.getString('MCP_HTTP_HOST', '127.0.0.1');
+		const host = config.getString('MCP_HTTP_HOST', 'localhost');
 		const port = config.getNumber('MCP_HTTP_PORT', 8080);
 		const path = config.getString('MCP_HTTP_PATH', '/mcp');
 

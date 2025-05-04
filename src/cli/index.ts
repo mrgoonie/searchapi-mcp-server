@@ -11,8 +11,7 @@ import searchApiCli from './searchapi.cli.js';
  */
 
 // Package description
-const DESCRIPTION =
-	'A boilerplate Model Context Protocol (MCP) server implementation using TypeScript';
+const DESCRIPTION = 'A Model Context Protocol (MCP) server for SearchAPI.site';
 
 /**
  * Run the CLI with the provided arguments

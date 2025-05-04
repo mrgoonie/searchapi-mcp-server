@@ -22,9 +22,7 @@ RUN npm run build
 # Ensure the entrypoint is executable (already set in prepare, but reensure here)
 RUN chmod +x dist/index.js
 
-EXPOSE 3000
-EXPOSE 6277
-EXPOSE 6274
+EXPOSE 8080
 
 # Start the MCP server
-CMD [ "npm", "start:server" ]
+CMD [ "npm", "run", "start:server:http" ]

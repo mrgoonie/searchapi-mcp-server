@@ -30,7 +30,8 @@
 		"dev:inspector": "npx @modelcontextprotocol/inspector",
 		"dev:cli": "DEBUG=true npm run build && DEBUG=true node dist/index.js",
 		"start:server": "npm run build && npx @modelcontextprotocol/inspector node dist/index.js",
-		"start:server:http": "npm run build && npx @modelcontextprotocol/inspector node dist/index.js --transport http",
+		"start:server:http": "node dist/index.js --transport http",
+		"start:inspector": "npx @modelcontextprotocol/inspector",
 		"start:cli": "npm run build && node dist/index.js"
 	},
 	"keywords": [
