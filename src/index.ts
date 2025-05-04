@@ -210,6 +210,10 @@ export async function startServer(mode: 'stdio' | 'http' = 'stdio') {
 			}
 		});
 
+		expressApp.get('/', (_req, res) => {
+			res.send('Hello World!');
+		});
+
 		// Handle GET requests for SSE streams
 		expressApp.get(path, async (req, res) => {
 			const sessionId = req.headers['mcp-session-id'] as
