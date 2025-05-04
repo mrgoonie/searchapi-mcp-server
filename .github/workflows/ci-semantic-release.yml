@@ -57,7 +57,7 @@ jobs:
               id: semantic
               env:
                   # Tokens needed for GitHub and npm authentication
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # For creating releases and commenting
+                  GITHUB_TOKEN: ${{ secrets.PAT }} # For creating releases and commenting
                   NPM_TOKEN: ${{ secrets.NPM_TOKEN }} # For publishing to npm
               run: |
                   echo "Running semantic-release for version bump and npm publishing"
