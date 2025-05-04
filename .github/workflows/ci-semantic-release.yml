@@ -63,7 +63,7 @@ jobs:
                   echo "Running semantic-release for version bump and npm publishing"
                   npx semantic-release
 
-                  # Note: GitHub Packages publishing has been removed
+            # Step 9: Create Pull Request if Push Fails
             - name: Create Pull Request if Push Fails
               if: failure()
               run: |
@@ -72,3 +72,11 @@ jobs:
                 gh pr create --base main --head release/${{ github.run_id }} --title "Automated release v${{ env.SEMANTIC_RELEASE_VERSION }}" --body "Created by semantic-release"
               env:
                 GITHUB_TOKEN: ${{ secrets.PAT }}
+
+            # Step 9: Enable auto-merge for PR
+            - name: Enable Auto-merge for PR
+              uses: peter-evans/enable-pull-request-automerge@v3
+              with:
+                token: ${{ secrets.PAT }}
+                merge-method: merge
+                pull-request-number: ${{ steps.semantic.outputs.pr }}
