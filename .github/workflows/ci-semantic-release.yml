@@ -64,3 +64,11 @@ jobs:
                   npx semantic-release
 
                   # Note: GitHub Packages publishing has been removed
+            - name: Create Pull Request if Push Fails
+              if: failure()
+              run: |
+                git checkout -b release/${{ github.run_id }}
+                git push origin release/${{ github.run_id }}
+                gh pr create --base main --head release/${{ github.run_id }} --title "Automated release v${{ env.SEMANTIC_RELEASE_VERSION }}" --body "Created by semantic-release"
+              env:
+                GITHUB_TOKEN: ${{ secrets.PAT }}
