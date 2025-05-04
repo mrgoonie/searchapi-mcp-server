@@ -2,7 +2,6 @@ import { Command } from 'commander';
 import { Logger } from '../utils/logger.util.js';
 import { VERSION, CLI_NAME } from '../utils/constants.util.js';
 
-import ipAddressCli from './ipaddress.cli.js';
 import searchApiCli from './searchapi.cli.js';
 
 /**
@@ -29,7 +28,6 @@ export async function runCli(args: string[]) {
 
 	// Register CLI commands
 	cliLogger.debug('Registering CLI commands...');
-	ipAddressCli.register(program);
 	searchApiCli.register(program);
 	cliLogger.debug('CLI commands registered successfully');
 
