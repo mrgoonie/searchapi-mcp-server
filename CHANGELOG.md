@@ -1,3 +1,21 @@
+# [1.1.0](https://github.com/mrgoonie/searchapi-mcp-server/compare/v1.0.0...v1.1.0) (2025-05-05)
+
+
+### Bug Fixes
+
+* **ci:** semantic release pr ([1c0b2bd](https://github.com/mrgoonie/searchapi-mcp-server/commit/1c0b2bd639ba98bb46fc8752e8d9addbe70192ef))
+* **cleanup:** remove ip examples ([69be6a3](https://github.com/mrgoonie/searchapi-mcp-server/commit/69be6a3b8d9a58d3127c3b85b859cd0009ddd82e))
+* **docker:** build test ([ce4e67a](https://github.com/mrgoonie/searchapi-mcp-server/commit/ce4e67ac36cfb4f8f4d37321ffacd397d06b32b2))
+* **docker:** ignore git dir ([f889b1c](https://github.com/mrgoonie/searchapi-mcp-server/commit/f889b1cc9e59062a5c5100914c49322c58246295))
+* **docs:** add todo tests ([126f9a0](https://github.com/mrgoonie/searchapi-mcp-server/commit/126f9a046247677a028caac790321b6e660f2100))
+* **release:** create pr ([59f6df0](https://github.com/mrgoonie/searchapi-mcp-server/commit/59f6df0420ca678b9ee85faa266b880730bfaf66))
+* **server:** discovery shortkey and package name ([53494b6](https://github.com/mrgoonie/searchapi-mcp-server/commit/53494b63042732d4b7ec5af2f108e008f7f7f904))
+
+
+### Features
+
+* **transport:** implemented streamable-http + express ([c6060bf](https://github.com/mrgoonie/searchapi-mcp-server/commit/c6060bf1f36c1f987c9a54de66e013be5aa77692))
+
 # 1.0.0 (2025-05-02)
 
 
