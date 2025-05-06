@@ -163,7 +163,7 @@ function register(server: McpServer) {
 	server.tool(
 		'search_google',
 		`Performs a Google search using SearchAPI.site. 
-Requires a search query and your SearchAPI.site API key. 
+Requires a search "query" string, can be able to search multiple keywords that separated by commas.
 Returns formatted search results including titles, snippets, and links.
 Create your SearchAPI.site API key at https://searchapi.site/profile`,
 		GoogleSearchToolArgs.shape,
