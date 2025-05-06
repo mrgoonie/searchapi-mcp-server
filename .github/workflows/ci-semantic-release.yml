@@ -3,118 +3,133 @@ name: CI - Semantic Release
 # This workflow is triggered on pushes to main or pull requests to main
 # It analyzes commits and automatically releases a new version when needed
 on:
-    push:
-        branches: [main]
-    pull_request:
-        branches: [main]
-        types: [opened, synchronize, reopened, closed]
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, closed]
 
 jobs:
-    release:
-        name: Semantic Release
-        runs-on: ubuntu-latest
-        # Permissions needed for creating releases, updating issues, and publishing packages
-        permissions:
-            contents: write # Needed to create releases and tags
-            issues: write # Needed to comment on issues
-            pull-requests: write # Needed to comment on pull requests
-            # packages permission removed as we're not using GitHub Packages
-        steps:
-            # Step 1: Check out the full Git history for proper versioning
-            - name: Checkout
-              uses: actions/checkout@v4
-              with:
-                  fetch-depth: 0 # Fetches all history for all branches and tags
+  release:
+    name: Semantic Release
+    runs-on: ubuntu-latest
+    # Permissions needed for creating releases, updating issues, and publishing packages
+    permissions:
+      contents: write # Needed to create releases and tags
+      issues: write # Needed to comment on issues
+      pull-requests: write # Needed to comment on pull requests
+    
+    steps:
+      # Step 1: Check out the full Git history for proper versioning
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetches all history for all branches and tags
 
-            # Step 2: Setup Node.js environment
-            - name: Setup Node.js
-              uses: actions/setup-node@v4
-              with:
-                  node-version: 22 # Using Node.js 22
-                  cache: 'npm' # Enable npm caching
+      # Step 2: Setup Node.js environment
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22 # Using Node.js 22
+          cache: 'npm' # Enable npm caching
 
-            # Step 3: Install dependencies with clean install
-            - name: Install dependencies
-              run: npm ci # Clean install preserving package-lock.json
+      # Step 3: Install dependencies with clean install
+      - name: Install dependencies
+        run: npm ci # Clean install preserving package-lock.json
 
-            # Step 4: Build the package
-            - name: Build
-              run: npm run build # Compiles TypeScript to JavaScript
+      # Step 4: Build the package
+      - name: Build
+        run: npm run build # Compiles TypeScript to JavaScript
 
-            # Step 5: Ensure executable permissions
-            - name: Set executable permissions
-              run: chmod +x dist/index.js
+      # Step 5: Ensure executable permissions
+      - name: Set executable permissions
+        run: chmod +x dist/index.js
 
-            # Step 6: Run tests to ensure quality
-            - name: Verify tests
-              run: npm test # Runs Jest tests
+      # Step 6: Run tests to ensure quality
+      - name: Verify tests
+        run: npm test # Runs Jest tests
 
-            # Step 7: Configure Git identity for releases
-            - name: Configure Git User
-              run: |
-                  git config --global user.email "github-actions[bot]@users.noreply.github.com"
-                  git config --global user.name "github-actions[bot]"
+      # Step 7: Configure Git identity for releases
+      - name: Configure Git User
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
 
-            # Step 8: Create a release branch for semantic-release
-            - name: Create Release Branch
-              if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-              run: |
-                  git checkout -b release/${{ github.run_id }}
-                  git push origin release/${{ github.run_id }}
-              env:
-                  GITHUB_TOKEN: ${{ secrets.PAT }}
+      # For push to main: Create release branch and PR
+      - name: Create Release Branch
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        id: create_branch
+        run: |
+          BRANCH_NAME="release-${{ github.run_id }}"
+          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+          git checkout -b $BRANCH_NAME
+          git push origin $BRANCH_NAME
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
 
-            # Step 9: Run semantic-release on the release branch
-            - name: Semantic Release
-              id: semantic
-              if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-              env:
-                  # Tokens needed for GitHub and npm authentication
-                  GITHUB_TOKEN: ${{ secrets.PAT }} # For creating releases and commenting
-                  NPM_TOKEN: ${{ secrets.NPM_TOKEN }} # For publishing to npm
-              run: |
-                  echo "Running semantic-release for version bump and npm publishing"
-                  # Run semantic-release in dry-run mode to get the next version
-                  NEXT_VERSION=$(npx semantic-release --dry-run | grep -oP 'The next release version is \K[0-9]+\.[0-9]+\.[0-9]+' || echo '')
-                  echo "NEXT_VERSION=$NEXT_VERSION" >> $GITHUB_ENV
+      # Determine next version using semantic-release dry run
+      - name: Determine Next Version
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        id: version
+        run: |
+          NEXT_VERSION=$(npx semantic-release --dry-run | grep -oP 'The next release version is \K[0-9]+\.[0-9]+\.[0-9]+' || echo '')
+          if [[ -n "$NEXT_VERSION" ]]; then
+            echo "version=$NEXT_VERSION" >> $GITHUB_OUTPUT
+            echo "New version will be: $NEXT_VERSION"
+          else
+            echo "No new version to release"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
 
-                  # Run semantic-release to update files but not create GitHub release yet
-                  npx semantic-release --no-ci
+      # Prepare release files (if new version detected)
+      - name: Prepare Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.version.outputs.version != ''
+        run: |
+          # Update version in package.json
+          npm version ${{ steps.version.outputs.version }} --no-git-tag-version
+          
+          # Generate changelog
+          npx conventional-changelog-cli -p angular -i CHANGELOG.md -s
+          
+          # Commit changes
+          git add package.json CHANGELOG.md
+          git commit -m "chore(release): ${{ steps.version.outputs.version }} [skip ci]"
+          git push origin ${{ steps.create_branch.outputs.branch_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
 
-                  # Check if there are changes to commit
-                  if [[ -n $(git status --porcelain) ]]; then
-                    git add .
-                    git commit -m "chore(release): $NEXT_VERSION [skip ci]"
-                    git push origin release/${{ github.run_id }}
-                  fi
+      # Create PR from release branch to main
+      - name: Create Pull Request
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.version.outputs.version != ''
+        id: create_pr
+        run: |
+          gh pr create --base main --head "${{ steps.create_branch.outputs.branch_name }}" \
+            --title "chore(release): v${{ steps.version.outputs.version }}" \
+            --body "Automated release. This PR updates version numbers and changelogs."
+          
+          PR_NUMBER=$(gh pr list --head "${{ steps.create_branch.outputs.branch_name }}" --json number -q '.[0].number')
+          echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
 
-            # Step 10: Create PR from release branch to main
-            - name: Create Pull Request
-              if: github.event_name == 'push' && github.ref == 'refs/heads/main' && env.NEXT_VERSION != ''
-              run: |
-                  gh pr create --base main --head release/${{ github.run_id }} --title "chore(release): v${{ env.NEXT_VERSION }}" --body "Automated release by semantic-release. This PR updates version numbers and changelogs."
-                  PR_NUMBER=$(gh pr list --head release/${{ github.run_id }} --json number -q '.[0].number')
-                  echo "PR_NUMBER=$PR_NUMBER" >> $GITHUB_ENV
-              env:
-                  GITHUB_TOKEN: ${{ secrets.PAT }}
+      # Enable auto-merge for the created PR
+      - name: Enable Auto-merge for PR
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.create_pr.outputs.pr_number != ''
+        uses: peter-evans/enable-pull-request-automerge@v3
+        with:
+          token: ${{ secrets.PAT }}
+          merge-method: merge
+          pull-request-number: ${{ steps.create_pr.outputs.pr_number }}
 
-            # Step 11: Enable auto-merge for PR
-            - name: Enable Auto-merge for PR
-              if: github.event_name == 'push' && github.ref == 'refs/heads/main' && env.PR_NUMBER != ''
-              uses: peter-evans/enable-pull-request-automerge@v3
-              with:
-                  token: ${{ secrets.PAT }}
-                  merge-method: merge
-                  pull-request-number: ${{ env.PR_NUMBER }}
-
-            # Step 12: Create GitHub release when PR is merged
-            - name: Create GitHub Release
-              if: github.event_name == 'pull_request' && github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release/')
-              run: |
-                  # Extract version from PR title
-                  VERSION=$(echo "${{ github.event.pull_request.title }}" | grep -oP 'v\K[0-9]+\.[0-9]+\.[0-9]+' || echo '')
-                  if [[ -n "$VERSION" ]]; then
-                    gh release create v$VERSION --title "Release v$VERSION" --notes "See CHANGELOG.md for details"
-                  fi
-              env:
-                  GITHUB_TOKEN: ${{ secrets.PAT }}
+      # Create GitHub release when PR is merged
+      - name: Create GitHub Release
+        if: github.event_name == 'pull_request' && github.event.pull_request.merged == true && startsWith(github.event.pull_request.head.ref, 'release-')
+        run: |
+          # Extract version from PR title
+          VERSION=$(echo "${{ github.event.pull_request.title }}" | grep -oP 'v\K[0-9]+\.[0-9]+\.[0-9]+' || echo '')
+          if [[ -n "$VERSION" ]]; then
+            gh release create "v$VERSION" --title "Release v$VERSION" --notes "See CHANGELOG.md for details"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
