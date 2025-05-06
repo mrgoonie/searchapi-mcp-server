@@ -1,5 +1,5 @@
 {
-	"branches": ["main"],
+	"branches": ["main", { "name": "release/*", "prerelease": false }],
 	"plugins": [
 		"@semantic-release/commit-analyzer",
 		"@semantic-release/release-notes-generator",
@@ -29,6 +29,13 @@
 				"message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
 			}
 		],
-		"@semantic-release/github"
+		[
+			"@semantic-release/github",
+			{
+				"successComment": "This PR is part of the release [v${nextRelease.version}](https://github.com/mrgoonie/searchapi-mcp-server/releases/tag/v${nextRelease.version})",
+				"failTitle": "The automated release failed",
+				"failComment": "The automated release from this PR failed. Please check the logs for more details."
+			}
+		]
 	]
 }
