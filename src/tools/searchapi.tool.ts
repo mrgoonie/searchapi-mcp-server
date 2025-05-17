@@ -165,7 +165,7 @@ function register(server: McpServer) {
 		`Performs a Google search using SearchAPI.site. 
 Requires a search "query" string, can be able to search multiple keywords that separated by commas.
 Returns formatted search results including titles, snippets, and links.
-Create your SearchAPI.site API key at https://searchapi.site/profile`,
+`,
 		GoogleSearchToolArgs.shape,
 		handleGoogleSearch,
 	);
@@ -176,7 +176,7 @@ Create your SearchAPI.site API key at https://searchapi.site/profile`,
 		`Performs a Google image search using SearchAPI.site.
 Requires a search query and your SearchAPI.site API key.
 Returns formatted image search results including titles, thumbnails, and source links.
-Create your SearchAPI.site API key at https://searchapi.site/profile`,
+`,
 		GoogleImageSearchToolArgs.shape,
 		handleGoogleImageSearch,
 	);
@@ -188,7 +188,7 @@ Create your SearchAPI.site API key at https://searchapi.site/profile`,
 Requires a search query and your SearchAPI.site API key.
 Returns formatted YouTube search results including video titles, thumbnails, descriptions, and links.
 Supports optional parameters for pagination, sorting, filtering by date and duration.
-Create your SearchAPI.site API key at https://searchapi.site/profile`,
+`,
 		YouTubeSearchToolArgs.shape,
 		handleYouTubeSearch,
 	);
