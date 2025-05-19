@@ -90,7 +90,7 @@
 	},
 	"dependencies": {
 		"@modelcontextprotocol/sdk": "^1.11.0",
-		"commander": "^13.1.0",
+		"commander": "^14.0.0",
 		"content-type": "^1.0.5",
 		"cors": "^2.8.5",
 		"dotenv": "^16.5.0",
