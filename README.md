@@ -497,3 +497,4 @@ When ready to publish your custom MCP server:
 ## Co-Authors
 
 - Claude Code (Claude AI Assistant)
+- Goon
