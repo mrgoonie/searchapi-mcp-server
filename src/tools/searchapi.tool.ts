@@ -28,7 +28,6 @@ async function handleGoogleSearch(args: GoogleSearchToolArgsType) {
 		// Map tool arguments to controller options
 		const controllerOptions = {
 			query: args.query,
-			apiKey: args.apiKey,
 		};
 
 		// Call the controller with the mapped options
@@ -73,7 +72,6 @@ async function handleGoogleImageSearch(args: GoogleImageSearchToolArgsType) {
 		// Map tool arguments to controller options
 		const controllerOptions = {
 			query: args.query,
-			apiKey: args.apiKey,
 		};
 
 		// Call the controller with the mapped options
@@ -116,7 +114,6 @@ async function handleYouTubeSearch(args: YouTubeSearchToolArgsType) {
 		// Map tool arguments to controller options
 		const controllerOptions = {
 			query: args.query,
-			apiKey: args.apiKey,
 			maxResults: args.maxResults,
 			pageToken: args.pageToken,
 			order: args.order,
