@@ -27,6 +27,8 @@ export interface SearchApiResult {
 export interface GoogleSearchResult extends SearchApiResult {
 	displayLink: string;
 	source: string;
+	meta: Record<string, string>;
+	image: Array<{ src: string }>;
 }
 
 /**

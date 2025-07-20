@@ -45,7 +45,7 @@ async function googleSearch(
 			throw new Error('Query is required for Google search');
 		}
 
-		const apiKey = options.apiKey || config.get('SEARCHAPI_API_KEY');
+		const apiKey = config.get('SEARCHAPI_API_KEY');
 		if (!apiKey) {
 			throw new Error('API key is required for SearchAPI.site');
 		}
@@ -119,7 +119,7 @@ async function googleImageSearch(
 			throw new Error('Query is required for Google image search');
 		}
 
-		const apiKey = options.apiKey || config.get('SEARCHAPI_API_KEY');
+		const apiKey = config.get('SEARCHAPI_API_KEY');
 		if (!apiKey) {
 			throw new Error('API key is required for SearchAPI.site');
 		}
@@ -191,7 +191,7 @@ async function youtubeSearch(
 			throw new Error('Query is required for YouTube search');
 		}
 
-		const apiKey = options.apiKey || config.get('SEARCHAPI_API_KEY');
+		const apiKey = config.get('SEARCHAPI_API_KEY');
 		if (!apiKey) {
 			throw new Error('API key is required for SearchAPI.site');
 		}
