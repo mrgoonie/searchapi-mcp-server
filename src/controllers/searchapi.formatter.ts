@@ -27,14 +27,24 @@ export function formatGoogleSearchResults(
 	}
 
 	let markdown = formatHeading('Search Results');
+	// console.log(JSON.stringify(results, null, 2));
 
 	results.forEach((result, index) => {
 		markdown += '\n\n';
 		markdown += formatHeading(`${index + 1}. ${result.title}`, 2);
 		markdown += '\n';
-		markdown += `**Source:** ${result.displayLink}\n\n`;
-		markdown += `${result.snippet}\n\n`;
 		markdown += formatUrl(result.link, 'View Result');
+		markdown += '\n';
+		// markdown += `**Source:** ${result.displayLink}\n\n`;
+		markdown += `${result.snippet}\n\n`;
+		if (result.meta) {
+			markdown += `${JSON.stringify(result.meta, null, 2)}\n\n`;
+		}
+		if (result.image) {
+			markdown +=
+				`**Images:**\n\n` +
+				result.image.map((image) => `* ${image.src}`).join('\n');
+		}
 
 		if (index < results.length - 1) {
 			markdown += '\n\n';
