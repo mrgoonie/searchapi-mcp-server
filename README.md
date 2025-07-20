@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/mrgoonie-searchapi-mcp-server-badge.png)](https://mseep.ai/app/mrgoonie-searchapi-mcp-server)
+
 # SearchAPI.site - MCP Server
 
 This project provides a Model Context Protocol (MCP) server that connects AI assistants to external data sources (Google, Bing, etc.) via [SearchAPI.site](https://searchapi.site). 
