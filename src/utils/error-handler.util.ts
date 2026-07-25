@@ -9,6 +9,7 @@ export enum ErrorCode {
 	INVALID_CURSOR = 'INVALID_CURSOR',
 	ACCESS_DENIED = 'ACCESS_DENIED',
 	VALIDATION_ERROR = 'VALIDATION_ERROR',
+	RATE_LIMITED = 'RATE_LIMITED',
 	UNEXPECTED_ERROR = 'UNEXPECTED_ERROR',
 }
 
@@ -63,6 +64,15 @@ export function detectErrorType(
 		error instanceof Error && 'statusCode' in error
 			? (error as { statusCode: number }).statusCode
 			: undefined;
+
+	// Rate limit detection
+	if (
+		errorMessage.includes('rate limit') ||
+		errorMessage.includes('too many requests') ||
+		statusCode === 429
+	) {
+		return { code: ErrorCode.RATE_LIMITED, statusCode: 429 };
+	}
 
 	// Not Found detection
 	if (
@@ -157,8 +167,12 @@ export function createUserFriendlyErrorMessage(
 			message = `${entity} not found${entityIdStr ? `: ${entityIdStr}` : ''}. Verify the ID is correct and that you have access to this ${entityType?.toLowerCase() || 'resource'}.`;
 			break;
 
+		case ErrorCode.RATE_LIMITED:
+			message = `Search API rate limit exceeded${entityIdStr ? ` for query "${entityIdStr}"` : ''}. Wait a moment and retry, or check your SearchAPI.site plan limits.`;
+			break;
+
 		case ErrorCode.ACCESS_DENIED:
-			message = `Access denied for ${entity.toLowerCase()}${entityIdStr ? ` ${entityIdStr}` : ''}. Verify your credentials and permissions.`;
+			message = `Access denied for ${entity.toLowerCase()}${entityIdStr ? ` ${entityIdStr}` : ''}. Verify SEARCHAPI_API_KEY is set and valid in your environment or MCP client config.`;
 			break;
 
 		case ErrorCode.INVALID_CURSOR:
@@ -168,7 +182,7 @@ export function createUserFriendlyErrorMessage(
 		case ErrorCode.VALIDATION_ERROR:
 			message =
 				originalMessage ||
-				`Invalid data provided for ${operation || 'operation'} ${entity.toLowerCase()}.`;
+				`Invalid data provided for ${operation || 'operation'} ${entity.toLowerCase()}. Provide a non-empty search query and valid parameters.`;
 			break;
 
 		default:

@@ -92,6 +92,32 @@ You can configure the HTTP server using these environment variables:
 - `MCP_HTTP_PORT`: The port to listen on (default: `8080`)
 - `MCP_HTTP_PATH`: The endpoint path (default: `/mcp`)
 
+**Cursor setup (stdio):**
+
+```json
+{
+  "mcpServers": {
+    "searchapi": {
+      "command": "node",
+      "args": ["/absolute/path/to/searchapi-mcp-server/dist/index.js"],
+      "env": {
+        "SEARCHAPI_API_KEY": "your-api-key"
+      }
+    }
+  }
+}
+```
+
+Set `SEARCHAPI_API_KEY` in the MCP `env` block (or your shell) before starting Cursor. Restart Cursor after changing MCP config.
+
+**Common tool errors:**
+
+| Error | Cause | Fix |
+| --- | --- | --- |
+| Missing required "query" | Empty search query | Pass a non-empty `query` string |
+| 401 / access denied | Invalid or missing API key | Set `SEARCHAPI_API_KEY` correctly |
+| 429 rate limit | Too many requests | Wait and retry, or upgrade your plan |
+
 ---
 
 # Source Code Overview

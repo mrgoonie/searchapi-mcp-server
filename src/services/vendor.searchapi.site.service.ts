@@ -59,6 +59,7 @@ async function makeRequest<T>(
 			const errorText = await response.text();
 			throw createApiError(
 				`SearchAPI.site API error: ${response.status} ${response.statusText} - ${errorText}`,
+				response.status,
 			);
 		}
 
@@ -67,6 +68,7 @@ async function makeRequest<T>(
 		if (!data.success) {
 			throw createApiError(
 				`SearchAPI.site API error: ${data.message || 'Unknown error'}`,
+				400,
 			);
 		}
 

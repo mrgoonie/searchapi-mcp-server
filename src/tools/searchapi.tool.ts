@@ -8,8 +8,20 @@ import {
 	YouTubeSearchToolArgs,
 	YouTubeSearchToolArgsType,
 } from './searchapi.types.js';
-import { formatErrorForMcpTool } from '../utils/error.util.js';
+import { formatErrorForMcpTool, createApiError } from '../utils/error.util.js';
 import searchApiController from '../controllers/searchapi.controller.js';
+
+function assertNonEmptyQuery(
+	query: string | undefined,
+	toolName: string,
+): void {
+	if (!query || !query.trim()) {
+		throw createApiError(
+			`Missing required "query" for ${toolName}. Provide a non-empty search query.`,
+			400,
+		);
+	}
+}
 
 /**
  * @function handleGoogleSearch
@@ -25,9 +37,16 @@ async function handleGoogleSearch(args: GoogleSearchToolArgsType) {
 	methodLogger.debug(`Performing Google search for query: ${args.query}`);
 
 	try {
+		assertNonEmptyQuery(args.query, 'search_google');
+
 		// Map tool arguments to controller options
 		const controllerOptions = {
 			query: args.query,
+			limit: args.limit,
+			offset: args.offset,
+			sort: args.sort,
+			from_date: args.from_date,
+			to_date: args.to_date,
 		};
 
 		// Call the controller with the mapped options
@@ -69,9 +88,16 @@ async function handleGoogleImageSearch(args: GoogleImageSearchToolArgsType) {
 	);
 
 	try {
+		assertNonEmptyQuery(args.query, 'search_google_images');
+
 		// Map tool arguments to controller options
 		const controllerOptions = {
 			query: args.query,
+			limit: args.limit,
+			offset: args.offset,
+			sort: args.sort,
+			from_date: args.from_date,
+			to_date: args.to_date,
 		};
 
 		// Call the controller with the mapped options
@@ -111,6 +137,8 @@ async function handleYouTubeSearch(args: YouTubeSearchToolArgsType) {
 	methodLogger.debug(`Performing YouTube search for query: ${args.query}`);
 
 	try {
+		assertNonEmptyQuery(args.query, 'search_youtube');
+
 		// Map tool arguments to controller options
 		const controllerOptions = {
 			query: args.query,
@@ -159,9 +187,13 @@ function register(server: McpServer) {
 	// Register Google search tool
 	server.tool(
 		'search_google',
-		`Performs a Google search using SearchAPI.site. 
-Requires a search "query" string, can be able to search multiple keywords that separated by commas.
+		`Performs a Google search using SearchAPI.site.
+Requires a non-empty "query" string; multiple keywords can be separated by commas.
 Returns formatted search results including titles, snippets, and links.
+Optional filters:
+- "limit" (1-100) and "offset" to page through results
+- "sort" such as "date:d" to rank newest first (omit for relevance ranking)
+- "from_date" and "to_date" (YYYY-MM-DD) to restrict results to a date range
 `,
 		GoogleSearchToolArgs.shape,
 		handleGoogleSearch,
@@ -171,8 +203,12 @@ Returns formatted search results including titles, snippets, and links.
 	server.tool(
 		'search_google_images',
 		`Performs a Google image search using SearchAPI.site.
-Requires a search query and your SearchAPI.site API key.
+Requires a non-empty "query" string.
 Returns formatted image search results including titles, thumbnails, and source links.
+Optional filters:
+- "limit" (1-100) and "offset" to page through results
+- "sort" such as "date:d" to rank newest first (omit for relevance ranking)
+- "from_date" and "to_date" (YYYY-MM-DD) to restrict results to a date range
 `,
 		GoogleImageSearchToolArgs.shape,
 		handleGoogleImageSearch,

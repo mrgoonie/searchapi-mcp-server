@@ -109,11 +109,21 @@ export function formatErrorForMcpTool(error: unknown): {
 	const mcpError = ensureMcpError(error);
 	methodLogger.error(`${mcpError.type} error`, mcpError);
 
+	const hint =
+		mcpError.type === ErrorType.AUTH_MISSING ||
+		mcpError.type === ErrorType.AUTH_INVALID
+			? ' Hint: set SEARCHAPI_API_KEY in your environment or MCP client config.'
+			: mcpError.statusCode === 429
+				? ' Hint: wait and retry, or check your SearchAPI.site plan limits.'
+				: mcpError.statusCode === 400
+					? ' Hint: verify the query and tool parameters are valid and non-empty.'
+					: '';
+
 	return {
 		content: [
 			{
 				type: 'text' as const,
-				text: `Error: ${mcpError.message}`,
+				text: `Error [${mcpError.type}]: ${mcpError.message}.${hint}`,
 			},
 		],
 	};
