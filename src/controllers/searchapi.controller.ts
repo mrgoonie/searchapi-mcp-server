@@ -50,11 +50,12 @@ async function googleSearch(
 			throw new Error('API key is required for SearchAPI.site');
 		}
 
-		// Define controller defaults
+		// Define controller defaults.
+		// `sort` is intentionally not defaulted: forcing "date:d" ranks by recency
+		// and discards Google relevance ranking for ordinary queries.
 		const defaults: Partial<GoogleSearchOptions> = {
 			limit: 10,
 			offset: 0,
-			sort: 'date:d',
 		};
 
 		// Apply defaults to provided options
@@ -124,11 +125,12 @@ async function googleImageSearch(
 			throw new Error('API key is required for SearchAPI.site');
 		}
 
-		// Define controller defaults
+		// Define controller defaults.
+		// `sort` stays unset so the API relevance ordering is preserved unless
+		// the caller explicitly asks for a different ordering.
 		const defaults: Partial<GoogleImageSearchOptions> = {
 			limit: 10,
 			offset: 0,
-			sort: 'date:d',
 		};
 
 		// Apply defaults to provided options
